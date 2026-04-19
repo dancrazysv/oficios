@@ -1,0 +1,8 @@
+{
+    "require": {
+        "endroid/qr-code": "^4.6",
+        "dompdf/dompdf": "^3.1",
+        "setasign/fpdi-tcpdf": "^2.3",
+        "phpmailer/phpmailer": "^6.11"
+    }
+}
