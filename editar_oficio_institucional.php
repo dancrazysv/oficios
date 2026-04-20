@@ -202,10 +202,10 @@ foreach ($entradas_raw as $ent) {
                 <button type="button" id="btn_add_oficio_bloque" class="btn btn-success btn-sm font-weight-bold">+ Agregar Oficio</button>
             </div>
             <div class="card-body" id="contenedor_oficios_bloques">
-                <?php foreach ($entradas_agrupadas as $idx => $grupo): ?>
+                <?php $idx = 0; foreach ($entradas_agrupadas as $grupo): $idx++; ?>
                     <div class="oficio-bloque">
                         <div class="oficio-header">
-                            <span>📬 Oficio de Entrada #<?php echo $idx + 1; ?></span>
+                            <span>📬 Oficio de Entrada #<?php echo $idx; ?></span>
                             <button type="button" class="btn btn-sm btn-outline-danger btn-remove-oficio-bloque">Eliminar Oficio</button>
                         </div>
                         <div class="form-row mb-3">
