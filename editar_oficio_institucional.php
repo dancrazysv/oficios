@@ -211,15 +211,15 @@ foreach ($entradas_raw as $ent) {
                         <div class="form-row mb-3">
                             <div class="form-group col-md-3">
                                 <label class="small font-weight-bold">N° Oficio Entrada:</label>
-                                <input type="text" name="num_oficio_in[]" class="form-control form-control-sm oficio-num" value="<?php echo e($grupo['num_oficio_in']); ?>" required>
+                                <input type="text" class="form-control form-control-sm oficio-num" value="<?php echo e($grupo['num_oficio_in']); ?>" required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="small font-weight-bold">Referencia:</label>
-                                <input type="text" name="ref_expediente_in[]" class="form-control form-control-sm oficio-ref" value="<?php echo e($grupo['ref_expediente_in']); ?>">
+                                <input type="text" class="form-control form-control-sm oficio-ref" value="<?php echo e($grupo['ref_expediente_in']); ?>">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="small font-weight-bold">Fecha Documento:</label>
-                                <input type="date" name="fecha_doc_in[]" class="form-control form-control-sm oficio-fecha" value="<?php echo e($grupo['fecha_doc_in']); ?>" required>
+                                <input type="date" class="form-control form-control-sm oficio-fecha" value="<?php echo e($grupo['fecha_doc_in']); ?>" required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="small font-weight-bold">Cantidad de Peticiones:</label>
@@ -230,6 +230,9 @@ foreach ($entradas_raw as $ent) {
                             <?php foreach ($grupo['peticiones'] as $peticion): ?>
                                 <div class="peticion-item">
                                     <div class="peticion-header">Petición</div>
+                                    <input type="hidden" name="num_oficio_in[]" class="hid-oficio-num" value="<?php echo e($grupo['num_oficio_in']); ?>">
+                                    <input type="hidden" name="ref_expediente_in[]" class="hid-oficio-ref" value="<?php echo e($grupo['ref_expediente_in']); ?>">
+                                    <input type="hidden" name="fecha_doc_in[]" class="hid-oficio-fecha" value="<?php echo e($grupo['fecha_doc_in']); ?>">
                                     <div class="form-row">
                                         <div class="form-group col-md-4">
                                             <label class="small font-weight-bold text-danger">Partida Solicitada:</label>
@@ -416,15 +419,15 @@ foreach ($entradas_raw as $ent) {
         <div class="form-row mb-3">
             <div class="form-group col-md-3">
                 <label class="small font-weight-bold">N° Oficio Entrada:</label>
-                <input type="text" name="num_oficio_in[]" class="form-control form-control-sm oficio-num" required>
+                <input type="text" class="form-control form-control-sm oficio-num" required>
             </div>
             <div class="form-group col-md-3">
                 <label class="small font-weight-bold">Referencia:</label>
-                <input type="text" name="ref_expediente_in[]" class="form-control form-control-sm oficio-ref">
+                <input type="text" class="form-control form-control-sm oficio-ref">
             </div>
             <div class="form-group col-md-3">
                 <label class="small font-weight-bold">Fecha Documento:</label>
-                <input type="date" name="fecha_doc_in[]" class="form-control form-control-sm oficio-fecha" required>
+                <input type="date" class="form-control form-control-sm oficio-fecha" required>
             </div>
             <div class="form-group col-md-3">
                 <label class="small font-weight-bold">Cantidad de Peticiones:</label>
@@ -434,6 +437,9 @@ foreach ($entradas_raw as $ent) {
         <div class="peticiones-container">
             <div class="peticion-item">
                 <div class="peticion-header">Petición</div>
+                <input type="hidden" name="num_oficio_in[]" class="hid-oficio-num">
+                <input type="hidden" name="ref_expediente_in[]" class="hid-oficio-ref">
+                <input type="hidden" name="fecha_doc_in[]" class="hid-oficio-fecha">
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label class="small font-weight-bold text-danger">Partida Solicitada:</label>
@@ -482,6 +488,9 @@ $(document).ready(function() {
                 const nuevo = `
                 <div class="peticion-item">
                     <div class="peticion-header">Petición</div>
+                    <input type="hidden" name="num_oficio_in[]" class="hid-oficio-num">
+                    <input type="hidden" name="ref_expediente_in[]" class="hid-oficio-ref">
+                    <input type="hidden" name="fecha_doc_in[]" class="hid-oficio-fecha">
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label class="small font-weight-bold text-danger">Partida Solicitada:</label>
@@ -505,6 +514,7 @@ $(document).ready(function() {
                 </div>`;
                 container.append(nuevo);
             }
+            syncOficioHiddens($(this).closest('.oficio-bloque'));
         }
     });
 
@@ -588,7 +598,26 @@ $(document).ready(function() {
         }
     });
 
+    /* ── Sync oficio-level visible inputs → hidden inputs per petición ── */
+    function syncOficioHiddens($bloque) {
+        const num = $bloque.find('.oficio-num').val() || '';
+        const ref = $bloque.find('.oficio-ref').val() || '';
+        const fec = $bloque.find('.oficio-fecha').val() || '';
+        $bloque.find('.peticiones-container .peticion-item').each(function() {
+            $(this).find('.hid-oficio-num').val(num);
+            $(this).find('.hid-oficio-ref').val(ref);
+            $(this).find('.hid-oficio-fecha').val(fec);
+        });
+    }
+
+    $(document).on('input change', '.oficio-num, .oficio-ref, .oficio-fecha', function() {
+        syncOficioHiddens($(this).closest('.oficio-bloque'));
+    });
+
     $('#formEditarOficioInst').on('submit', function() {
+        $('#contenedor_oficios_bloques .oficio-bloque').each(function() {
+            syncOficioHiddens($(this));
+        });
         $('#btnSubmit').prop('disabled', true).html('Guardando...');
     });
 });

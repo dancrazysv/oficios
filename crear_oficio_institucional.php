@@ -204,15 +204,15 @@ function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
                         <div class="form-row mb-3">
                             <div class="form-group col-md-3">
                                 <label class="small font-weight-bold">N° Oficio Entrada:</label>
-                                <input type="text" name="num_oficio_in[]" class="form-control form-control-sm oficio-num" required>
+                                <input type="text" class="form-control form-control-sm oficio-num" required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="small font-weight-bold">Referencia:</label>
-                                <input type="text" name="ref_expediente_in[]" class="form-control form-control-sm oficio-ref">
+                                <input type="text" class="form-control form-control-sm oficio-ref">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="small font-weight-bold">Fecha Documento:</label>
-                                <input type="date" name="fecha_doc_in[]" class="form-control form-control-sm oficio-fecha" required>
+                                <input type="date" class="form-control form-control-sm oficio-fecha" required>
                             </div>
                             <div class="form-group col-md-3 d-flex align-items-end">
                                 <button type="button" class="btn btn-sm btn-outline-primary btn-add-peticion" data-oficio-index="0">+ Agregar Petición</button>
@@ -222,6 +222,9 @@ function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
                         <div class="peticiones-container" data-oficio-index="0">
                             <div class="peticion-item" data-peticion-id="1">
                                 <div class="peticion-header">Petición #1</div>
+                                <input type="hidden" name="num_oficio_in[]" class="hid-oficio-num">
+                                <input type="hidden" name="ref_expediente_in[]" class="hid-oficio-ref">
+                                <input type="hidden" name="fecha_doc_in[]" class="hid-oficio-fecha">
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label class="small font-weight-bold text-danger">Partida Solicitada:</label>
@@ -368,6 +371,9 @@ function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
 <template id="template_peticion">
     <div class="peticion-item">
         <div class="peticion-header">Petición #<span class="peticion-num">2</span></div>
+        <input type="hidden" name="num_oficio_in[]" class="hid-oficio-num">
+        <input type="hidden" name="ref_expediente_in[]" class="hid-oficio-ref">
+        <input type="hidden" name="fecha_doc_in[]" class="hid-oficio-fecha">
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label class="small font-weight-bold text-danger">Partida Solicitada:</label>
@@ -400,15 +406,15 @@ function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
         <div class="form-row mb-3">
             <div class="form-group col-md-3">
                 <label class="small font-weight-bold">N° Oficio Entrada:</label>
-                <input type="text" name="num_oficio_in[]" class="form-control form-control-sm oficio-num" required>
+                <input type="text" class="form-control form-control-sm oficio-num" required>
             </div>
             <div class="form-group col-md-3">
                 <label class="small font-weight-bold">Referencia:</label>
-                <input type="text" name="ref_expediente_in[]" class="form-control form-control-sm oficio-ref">
+                <input type="text" class="form-control form-control-sm oficio-ref">
             </div>
             <div class="form-group col-md-3">
                 <label class="small font-weight-bold">Fecha Documento:</label>
-                <input type="date" name="fecha_doc_in[]" class="form-control form-control-sm oficio-fecha" required>
+                <input type="date" class="form-control form-control-sm oficio-fecha" required>
             </div>
             <div class="form-group col-md-3 d-flex align-items-end">
                 <button type="button" class="btn btn-sm btn-outline-primary btn-add-peticion" data-oficio-index="1">+ Agregar Petición</button>
@@ -417,6 +423,9 @@ function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
         <div class="peticiones-container" data-oficio-index="1">
             <div class="peticion-item">
                 <div class="peticion-header">Petición #1</div>
+                <input type="hidden" name="num_oficio_in[]" class="hid-oficio-num">
+                <input type="hidden" name="ref_expediente_in[]" class="hid-oficio-ref">
+                <input type="hidden" name="fecha_doc_in[]" class="hid-oficio-fecha">
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label class="small font-weight-bold text-danger">Partida Solicitada:</label>
@@ -591,6 +600,7 @@ $(document).ready(function() {
         $nuevaPeticion.find('.peticion-num').text(peticionCount);
         $nuevaPeticion.attr('data-peticion-id', currentId);
         container.append($nuevaPeticion);
+        syncOficioHiddens(oficioBloque);
         addPersonaRow(currentId, 'NACIMIENTO', '');
     });
 
@@ -658,7 +668,28 @@ $(document).ready(function() {
         }
     });
 
+    /* ── Sync oficio-level visible inputs → hidden inputs per petición ── */
+    function syncOficioHiddens($bloque) {
+        const num  = $bloque.find('> .card-body > .form-row .oficio-num, .oficio-num').first().val() || $bloque.find('.oficio-num').val() || '';
+        const ref  = $bloque.find('.oficio-ref').val() || '';
+        const fec  = $bloque.find('.oficio-fecha').val() || '';
+        $bloque.find('.peticiones-container .peticion-item').each(function() {
+            $(this).find('.hid-oficio-num').val(num);
+            $(this).find('.hid-oficio-ref').val(ref);
+            $(this).find('.hid-oficio-fecha').val(fec);
+        });
+    }
+
+    /* Sync on every keystroke / change on the visible oficio inputs */
+    $(document).on('input change', '.oficio-num, .oficio-ref, .oficio-fecha', function() {
+        syncOficioHiddens($(this).closest('.oficio-entrada-row'));
+    });
+
+    /* Final sync before submit */
     $('#formOficioInst').on('submit', function() {
+        $('#contenedor_oficios_entrada .oficio-entrada-row').each(function() {
+            syncOficioHiddens($(this));
+        });
         $('#btnSubmit').prop('disabled', true).html('Procesando...');
     });
 });
