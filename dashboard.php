@@ -423,8 +423,7 @@ $ruta_pdf = $doc['ruta_pdf_final'] ?? '';
                 <a href="editar_oficio_institucional.php?id=<?php echo $id; ?>" class="btn btn-sm btn-info">Editar</a>
             <?php elseif ($puede_revisar): ?>
                 <button class="btn btn-sm btn-primary btn-habilitar" data-id="<?php echo $id; ?>" data-type="OFICIO_INST">Habilitar</button>
-                <a href="view_pdf.php?type=OFICIO_INST&id=<?php echo $id; ?>" target="_blank" class="btn btn-sm btn-outline-secondary">Revisar</a>
-                <a href="editar_oficio_institucional.php?id=<?php echo $id; ?>" class="btn btn-sm btn-info">Editar</a>
+                <a href="preview_pdf.php?id=<?php echo $id; ?>&type=OFICIO_INST" target="_blank" class="btn btn-sm btn-outline-secondary">Revisar</a>
             <?php endif; ?>
         <?php else: ?>
             <?php if ($puede_revisar): ?>
