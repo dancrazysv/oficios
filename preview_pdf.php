@@ -183,6 +183,12 @@ try {
         $tmpFile = sys_get_temp_dir() . '/preview_inst_' . uniqid('', true) . '.pdf';
         file_put_contents($tmpFile, $dompdf->output());
 
+        register_shutdown_function(function () use ($tmpFile) {
+            if (file_exists($tmpFile)) {
+                @unlink($tmpFile);
+            }
+        });
+
         if ($isSupervisor) {
             outputPdfPlain($tmpFile, 'PREVIEW_OFICIO_INST.pdf');
         }

@@ -41,10 +41,12 @@ function tipoPartidaTexto(string $tipo): string {
 try {
     $stmt = $pdo->prepare("
         SELECT oi.*, i.nombre_institucion, i.unidad_dependencia, i.ubicacion_sede, i.email_contacto,
-               u.nombre_completo AS creado_por_nombre, u.area AS creado_por_area
+               u.nombre_completo AS creado_por_nombre, u.area AS creado_por_area,
+               ua.nombre_completo AS aprobado_por_nombre
         FROM oficios_institucionales oi
         INNER JOIN instituciones i ON oi.id_institucion = i.id
         LEFT JOIN usuarios u ON oi.creado_por = u.id
+        LEFT JOIN usuarios ua ON oi.aprobado_por = ua.id
         WHERE oi.id = ?
         LIMIT 1
     ");
@@ -158,6 +160,18 @@ body{background:#f8f9fa}
                 <div class="col-12">
                     <div class="info-label">Correo Institucional</div>
                     <div class="info-value"><a href="mailto:<?php echo e($oficio['email_envio']); ?>"><?php echo e($oficio['email_envio']); ?></a></div>
+                </div>
+            </div>
+            <?php endif; ?>
+            <?php if ($oficio['estado_validacion'] === 'APROBADO' && !empty($oficio['aprobado_por_nombre'])): ?>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class="info-label">Aprobado Por</div>
+                    <div class="info-value"><?php echo e($oficio['aprobado_por_nombre']); ?></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-label">Fecha de Aprobación</div>
+                    <div class="info-value"><?php echo fechaFormateada($oficio['fecha_aprobacion'] ?? null); ?></div>
                 </div>
             </div>
             <?php endif; ?>
