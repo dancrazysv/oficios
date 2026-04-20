@@ -27,15 +27,16 @@ function fechaFormateada(?string $fecha): string {
 }
 
 function tipoPartidaTexto(string $tipo): string {
-    return match (strtoupper(trim($tipo))) {
+    $map = [
         'NACIMIENTO' => 'NACIMIENTO',
-        'DEFUNCION' => 'DEFUNCIÓN',
+        'DEFUNCION'  => 'DEFUNCIÓN',
         'MATRIMONIO' => 'MATRIMONIO',
-        'DIVORCIO' => 'DIVORCIO',
-        'CEDULA' => 'CÉDULA',
-        'CARNET' => 'CARNET MINORIDAD',
-        default => $tipo,
-    };
+        'DIVORCIO'   => 'DIVORCIO',
+        'CEDULA'     => 'CÉDULA',
+        'CARNET'     => 'CARNET MINORIDAD',
+    ];
+    $key = strtoupper(trim($tipo));
+    return $map[$key] ?? $tipo;
 }
 
 try {
