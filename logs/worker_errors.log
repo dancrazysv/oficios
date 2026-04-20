@@ -1,0 +1,599 @@
+[10-Feb-2026 22:51:28 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:19
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 19
+[10-Feb-2026 22:52:05 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:19
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 19
+[10-Feb-2026 22:52:24 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:19
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 19
+[10-Feb-2026 22:52:32 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:19
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 19
+[10-Feb-2026 22:55:57 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 25
+[10-Feb-2026 22:55:59 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 25
+[10-Feb-2026 22:56:01 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 25
+[10-Feb-2026 22:56:05 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 25
+[10-Feb-2026 23:00:01 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 25
+[10-Feb-2026 23:00:01 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 25
+[10-Feb-2026 23:00:02 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 25
+[10-Feb-2026 23:00:02 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 25
+[10-Feb-2026 23:00:02 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 25
+[10-Feb-2026 23:00:02 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 25
+[10-Feb-2026 23:00:03 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in C:\xampp\htdocs\oficios\worker_envios.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\oficios\worker_envios.php on line 25
+[10-Feb-2026 23:07:43 Europe/Berlin] Error worker ref=REFSSC-2026-0161 : SQLSTATE[42S02]: Base table or view not found: 1146 Table 'registro_oficios.oficientes' doesn't exist
+[10-Feb-2026 23:07:43 Europe/Berlin] Error worker ref=REFSSC-2026-0161 : SQLSTATE[42S02]: Base table or view not found: 1146 Table 'registro_oficios.oficientes' doesn't exist
+[10-Feb-2026 23:10:51 Europe/Berlin] Error worker ref=REFSSC-2026-0161 : SMTP Error: Could not authenticate.
+[10-Feb-2026 23:10:51 Europe/Berlin] Error worker ref=REFSSC-2026-0161 : SMTP Error: Could not authenticate.
+[10-Feb-2026 23:11:12 Europe/Berlin] Error worker ref=REFSSC-2026-0161 : SMTP Error: Could not authenticate.
+[10-Feb-2026 23:11:13 Europe/Berlin] Error worker ref=REFSSC-2026-0161 : SMTP Error: Could not authenticate.
+[11-Feb-2026 14:00:02 Europe/Berlin] Error worker ref=REFSSC-2026-0179: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'registro_oficios.oficientes' doesn't exist
+[11-Feb-2026 14:22:21 Europe/Berlin] Error worker ref=REFSSC-2026-0178: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'registro_oficios.oficientes' doesn't exist
+[11-Feb-2026 20:29:41 Europe/Berlin] Error worker ref=REFSSC-2026-0013: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'municipio_destino_id' in 'where clause'
+[11-Feb-2026 20:30:56 Europe/Berlin] Error worker ref=REFSSC-2026-0013: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'municipio_destino_id' in 'where clause'
+[23-Feb-2026 18:52:42 Europe/Berlin] Error worker ref=REFSSC-2026-0251: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 18:53:04 Europe/Berlin] Error worker ref=REFSSC-2026-0252: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 18:53:25 Europe/Berlin] Error worker ref=REFSSC-2026-0262: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 18:53:46 Europe/Berlin] Error worker ref=REFSSC-2026-0270: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 18:57:42 Europe/Berlin] Error worker ref=REFSSC-2026-0251: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 18:58:03 Europe/Berlin] Error worker ref=REFSSC-2026-0252: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 18:58:24 Europe/Berlin] Error worker ref=REFSSC-2026-0262: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 18:58:45 Europe/Berlin] Error worker ref=REFSSC-2026-0270: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 18:59:07 Europe/Berlin] Error worker ref=REFSSC-2026-0177: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:02:42 Europe/Berlin] Error worker ref=REFSSC-2026-0251: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:03:03 Europe/Berlin] Error worker ref=REFSSC-2026-0252: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:03:24 Europe/Berlin] Error worker ref=REFSSC-2026-0262: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:03:45 Europe/Berlin] Error worker ref=REFSSC-2026-0270: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:04:07 Europe/Berlin] Error worker ref=REFSSC-2026-0177: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:07:42 Europe/Berlin] Error worker ref=REFSSC-2026-0177: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:08:03 Europe/Berlin] Error worker ref=REFSSC-2026-0176: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:08:24 Europe/Berlin] Error worker ref=REFSSC-2026-0175: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:08:46 Europe/Berlin] Error worker ref=REFSSC-2026-0174: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:09:07 Europe/Berlin] Error worker ref=REFSSC-2026-0173: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:12:42 Europe/Berlin] Error worker ref=REFSSC-2026-0176: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:13:03 Europe/Berlin] Error worker ref=REFSSC-2026-0175: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:13:24 Europe/Berlin] Error worker ref=REFSSC-2026-0174: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:13:45 Europe/Berlin] Error worker ref=REFSSC-2026-0173: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:14:07 Europe/Berlin] Error worker ref=REFSSC-2026-0172: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:17:42 Europe/Berlin] Error worker ref=REFSSC-2026-0176: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:18:03 Europe/Berlin] Error worker ref=REFSSC-2026-0175: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:18:24 Europe/Berlin] Error worker ref=REFSSC-2026-0174: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:18:45 Europe/Berlin] Error worker ref=REFSSC-2026-0173: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:19:06 Europe/Berlin] Error worker ref=REFSSC-2026-0172: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:22:42 Europe/Berlin] Error worker ref=REFSSC-2026-0172: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:23:03 Europe/Berlin] Error worker ref=REFSSC-2026-0171: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:23:24 Europe/Berlin] Error worker ref=REFSSC-2026-0170: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:23:45 Europe/Berlin] Error worker ref=REFSSC-2026-0169: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:24:06 Europe/Berlin] Error worker ref=REFSSC-2026-0168: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:27:42 Europe/Berlin] Error worker ref=REFSSC-2026-0171: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:28:03 Europe/Berlin] Error worker ref=REFSSC-2026-0170: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:28:24 Europe/Berlin] Error worker ref=REFSSC-2026-0169: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:28:45 Europe/Berlin] Error worker ref=REFSSC-2026-0168: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:29:07 Europe/Berlin] Error worker ref=REFSSC-2026-0167: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:32:42 Europe/Berlin] Error worker ref=REFSSC-2026-0171: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:33:03 Europe/Berlin] Error worker ref=REFSSC-2026-0170: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:33:24 Europe/Berlin] Error worker ref=REFSSC-2026-0169: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:33:45 Europe/Berlin] Error worker ref=REFSSC-2026-0168: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:34:07 Europe/Berlin] Error worker ref=REFSSC-2026-0167: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:37:42 Europe/Berlin] Error worker ref=REFSSC-2026-0167: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:38:03 Europe/Berlin] Error worker ref=REFSSC-2026-0166: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:38:24 Europe/Berlin] Error worker ref=REFSSC-2026-0165: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:38:45 Europe/Berlin] Error worker ref=REFSSC-2026-0163: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:39:07 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:42:42 Europe/Berlin] Error worker ref=REFSSC-2026-0166: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:43:03 Europe/Berlin] Error worker ref=REFSSC-2026-0165: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:43:24 Europe/Berlin] Error worker ref=REFSSC-2026-0163: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:43:45 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:44:07 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:47:42 Europe/Berlin] Error worker ref=REFSSC-2026-0166: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:48:03 Europe/Berlin] Error worker ref=REFSSC-2026-0165: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:48:24 Europe/Berlin] Error worker ref=REFSSC-2026-0163: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:48:45 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:49:07 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:52:42 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:53:03 Europe/Berlin] Error worker ref=REFSSC-2026-0024: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:53:24 Europe/Berlin] Error worker ref=REFSSC-2026-0009: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:53:46 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:57:42 Europe/Berlin] Error worker ref=REFSSC-2026-0024: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:58:03 Europe/Berlin] Error worker ref=REFSSC-2026-0009: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 19:58:24 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 20:02:42 Europe/Berlin] Error worker ref=REFSSC-2026-0024: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 20:03:03 Europe/Berlin] Error worker ref=REFSSC-2026-0009: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[23-Feb-2026 20:03:24 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 16:43:22 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 16:47:43 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 16:52:46 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 16:58:49 Europe/Berlin] Error worker ref=REFSSC-2026-0251: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 16:59:11 Europe/Berlin] Error worker ref=REFSSC-2026-0252: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 16:59:32 Europe/Berlin] Error worker ref=REFSSC-2026-0262: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 16:59:53 Europe/Berlin] Error worker ref=REFSSC-2026-0270: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:00:14 Europe/Berlin] Error worker ref=REFSSC-2026-0177: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:01:37 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:01:37 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:01:37 Europe/Berlin] Error worker ref=REFSSC-2026-0251: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:01:59 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:01:59 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:01:59 Europe/Berlin] Error worker ref=REFSSC-2026-0252: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:02:20 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:02:20 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:02:20 Europe/Berlin] Error worker ref=REFSSC-2026-0262: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:02:41 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:02:41 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:02:41 Europe/Berlin] Error worker ref=REFSSC-2026-0270: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:03:02 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:03:02 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:03:02 Europe/Berlin] Error worker ref=REFSSC-2026-0177: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:07:46 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:07:46 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:07:46 Europe/Berlin] Error worker ref=REFSSC-2026-0251: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:08:07 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:08:07 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:08:07 Europe/Berlin] Error worker ref=REFSSC-2026-0252: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:08:28 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:08:28 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:08:28 Europe/Berlin] Error worker ref=REFSSC-2026-0262: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:08:49 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:08:49 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:08:49 Europe/Berlin] Error worker ref=REFSSC-2026-0270: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:09:10 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:09:10 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:09:10 Europe/Berlin] Error worker ref=REFSSC-2026-0177: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:12:45 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:12:45 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:12:45 Europe/Berlin] Error worker ref=REFSSC-2026-0176: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:13:06 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:13:08 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:13:08 Europe/Berlin] Error worker ref=REFSSC-2026-0175: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:13:29 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:13:29 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:13:29 Europe/Berlin] Error worker ref=REFSSC-2026-0174: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:13:50 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:13:50 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:13:50 Europe/Berlin] Error worker ref=REFSSC-2026-0173: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:14:11 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:14:11 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:14:11 Europe/Berlin] Error worker ref=REFSSC-2026-0172: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:17:44 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:17:44 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:17:44 Europe/Berlin] Error worker ref=REFSSC-2026-0176: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:18:05 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:18:05 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:18:05 Europe/Berlin] Error worker ref=REFSSC-2026-0175: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:18:26 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:18:26 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:18:26 Europe/Berlin] Error worker ref=REFSSC-2026-0174: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:18:47 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:18:47 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:18:47 Europe/Berlin] Error worker ref=REFSSC-2026-0173: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:19:08 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:19:08 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:19:08 Europe/Berlin] Error worker ref=REFSSC-2026-0172: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:22:46 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:22:46 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:22:46 Europe/Berlin] Error worker ref=REFSSC-2026-0176: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:23:07 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:23:07 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:23:07 Europe/Berlin] Error worker ref=REFSSC-2026-0175: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:23:28 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:23:28 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:23:28 Europe/Berlin] Error worker ref=REFSSC-2026-0174: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:23:49 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:23:49 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:23:49 Europe/Berlin] Error worker ref=REFSSC-2026-0173: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:24:10 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:24:10 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:24:10 Europe/Berlin] Error worker ref=REFSSC-2026-0172: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:27:43 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:27:43 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:27:43 Europe/Berlin] Error worker ref=REFSSC-2026-0171: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:28:04 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:28:04 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:28:04 Europe/Berlin] Error worker ref=REFSSC-2026-0170: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:28:25 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:28:25 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:28:25 Europe/Berlin] Error worker ref=REFSSC-2026-0169: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:28:46 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:28:46 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:28:46 Europe/Berlin] Error worker ref=REFSSC-2026-0168: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:29:07 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:29:07 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:29:07 Europe/Berlin] Error worker ref=REFSSC-2026-0167: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:32:43 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:32:43 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:32:43 Europe/Berlin] Error worker ref=REFSSC-2026-0171: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:33:04 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:33:04 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:33:04 Europe/Berlin] Error worker ref=REFSSC-2026-0170: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:33:25 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:33:25 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:33:25 Europe/Berlin] Error worker ref=REFSSC-2026-0169: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:33:46 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:33:46 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:33:46 Europe/Berlin] Error worker ref=REFSSC-2026-0168: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:34:07 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:34:07 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:34:07 Europe/Berlin] Error worker ref=REFSSC-2026-0167: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:37:42 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:37:42 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:37:42 Europe/Berlin] Error worker ref=REFSSC-2026-0171: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:38:03 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:38:03 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:38:03 Europe/Berlin] Error worker ref=REFSSC-2026-0170: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:38:24 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:38:24 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:38:24 Europe/Berlin] Error worker ref=REFSSC-2026-0169: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:38:45 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:38:45 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:38:45 Europe/Berlin] Error worker ref=REFSSC-2026-0168: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:39:06 Europe/Berlin] SMTP DEBUG: SMTP ERROR: Failed to connect to server: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.
+ (10060)
+[24-Feb-2026 17:39:06 Europe/Berlin] SMTP DEBUG: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:39:06 Europe/Berlin] Error worker ref=REFSSC-2026-0167: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:42:42 Europe/Berlin] Error worker ref=REFSSC-2026-0166: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:43:03 Europe/Berlin] Error worker ref=REFSSC-2026-0165: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:43:24 Europe/Berlin] Error worker ref=REFSSC-2026-0163: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:43:45 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:44:06 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:47:42 Europe/Berlin] Error worker ref=REFSSC-2026-0166: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:48:03 Europe/Berlin] Error worker ref=REFSSC-2026-0165: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:48:24 Europe/Berlin] Error worker ref=REFSSC-2026-0163: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:48:45 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:49:06 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:52:42 Europe/Berlin] Error worker ref=REFSSC-2026-0166: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:53:03 Europe/Berlin] Error worker ref=REFSSC-2026-0165: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:53:24 Europe/Berlin] Error worker ref=REFSSC-2026-0163: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:53:45 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:54:06 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:57:42 Europe/Berlin] Error worker ref=REFSSC-2026-0024: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:58:03 Europe/Berlin] Error worker ref=REFSSC-2026-0009: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:58:24 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 17:58:45 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:02:42 Europe/Berlin] Error worker ref=REFSSC-2026-0024: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:03:03 Europe/Berlin] Error worker ref=REFSSC-2026-0009: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:03:24 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:03:45 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:07:42 Europe/Berlin] Error worker ref=REFSSC-2026-0024: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:08:03 Europe/Berlin] Error worker ref=REFSSC-2026-0009: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:08:24 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:08:45 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:46:55 Europe/Berlin] Error worker ref=REFSSC-2026-0251: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:47:16 Europe/Berlin] Error worker ref=REFSSC-2026-0252: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:47:37 Europe/Berlin] Error worker ref=REFSSC-2026-0262: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:47:58 Europe/Berlin] Error worker ref=REFSSC-2026-0270: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:48:19 Europe/Berlin] Error worker ref=REFSSC-2026-0177: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:52:46 Europe/Berlin] Error worker ref=REFSSC-2026-0251: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:53:07 Europe/Berlin] Error worker ref=REFSSC-2026-0252: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:53:28 Europe/Berlin] Error worker ref=REFSSC-2026-0262: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:53:49 Europe/Berlin] Error worker ref=REFSSC-2026-0270: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:54:10 Europe/Berlin] Error worker ref=REFSSC-2026-0177: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:57:42 Europe/Berlin] Error worker ref=REFSSC-2026-0251: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:58:03 Europe/Berlin] Error worker ref=REFSSC-2026-0252: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:58:24 Europe/Berlin] Error worker ref=REFSSC-2026-0262: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:58:45 Europe/Berlin] Error worker ref=REFSSC-2026-0270: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 18:59:06 Europe/Berlin] Error worker ref=REFSSC-2026-0177: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:02:43 Europe/Berlin] Error worker ref=REFSSC-2026-0176: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:03:04 Europe/Berlin] Error worker ref=REFSSC-2026-0175: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:03:25 Europe/Berlin] Error worker ref=REFSSC-2026-0174: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:03:46 Europe/Berlin] Error worker ref=REFSSC-2026-0173: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:04:07 Europe/Berlin] Error worker ref=REFSSC-2026-0172: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:07:42 Europe/Berlin] Error worker ref=REFSSC-2026-0176: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:08:03 Europe/Berlin] Error worker ref=REFSSC-2026-0175: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:08:24 Europe/Berlin] Error worker ref=REFSSC-2026-0174: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:08:45 Europe/Berlin] Error worker ref=REFSSC-2026-0173: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:09:06 Europe/Berlin] Error worker ref=REFSSC-2026-0172: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:12:42 Europe/Berlin] Error worker ref=REFSSC-2026-0176: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:13:03 Europe/Berlin] Error worker ref=REFSSC-2026-0175: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:13:24 Europe/Berlin] Error worker ref=REFSSC-2026-0174: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:13:45 Europe/Berlin] Error worker ref=REFSSC-2026-0173: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:14:06 Europe/Berlin] Error worker ref=REFSSC-2026-0172: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:17:42 Europe/Berlin] Error worker ref=REFSSC-2026-0171: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:18:03 Europe/Berlin] Error worker ref=REFSSC-2026-0170: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:18:24 Europe/Berlin] Error worker ref=REFSSC-2026-0169: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:18:45 Europe/Berlin] Error worker ref=REFSSC-2026-0168: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:19:06 Europe/Berlin] Error worker ref=REFSSC-2026-0167: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:22:42 Europe/Berlin] Error worker ref=REFSSC-2026-0171: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:23:03 Europe/Berlin] Error worker ref=REFSSC-2026-0170: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:23:24 Europe/Berlin] Error worker ref=REFSSC-2026-0169: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:23:45 Europe/Berlin] Error worker ref=REFSSC-2026-0168: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:24:06 Europe/Berlin] Error worker ref=REFSSC-2026-0167: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:27:42 Europe/Berlin] Error worker ref=REFSSC-2026-0171: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:28:03 Europe/Berlin] Error worker ref=REFSSC-2026-0170: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:28:24 Europe/Berlin] Error worker ref=REFSSC-2026-0169: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:28:45 Europe/Berlin] Error worker ref=REFSSC-2026-0168: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:29:06 Europe/Berlin] Error worker ref=REFSSC-2026-0167: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:32:43 Europe/Berlin] Error worker ref=REFSSC-2026-0166: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:33:04 Europe/Berlin] Error worker ref=REFSSC-2026-0165: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:33:25 Europe/Berlin] Error worker ref=REFSSC-2026-0163: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:33:46 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:34:07 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:37:42 Europe/Berlin] Error worker ref=REFSSC-2026-0166: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:38:03 Europe/Berlin] Error worker ref=REFSSC-2026-0165: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:38:24 Europe/Berlin] Error worker ref=REFSSC-2026-0163: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:38:45 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:39:06 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:42:43 Europe/Berlin] Error worker ref=REFSSC-2026-0166: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:43:04 Europe/Berlin] Error worker ref=REFSSC-2026-0165: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:43:25 Europe/Berlin] Error worker ref=REFSSC-2026-0163: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:43:46 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:44:07 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:47:42 Europe/Berlin] Error worker ref=REFSSC-2026-0024: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:48:03 Europe/Berlin] Error worker ref=REFSSC-2026-0009: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:48:24 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:48:45 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:52:42 Europe/Berlin] Error worker ref=REFSSC-2026-0024: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:53:03 Europe/Berlin] Error worker ref=REFSSC-2026-0009: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:53:24 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:53:45 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:57:42 Europe/Berlin] Error worker ref=REFSSC-2026-0024: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:58:03 Europe/Berlin] Error worker ref=REFSSC-2026-0009: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:58:24 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 19:58:45 Europe/Berlin] Error worker ref=REFSSC-2026-0006: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 20:12:42 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 20:17:42 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 20:22:42 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 20:27:42 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 20:32:42 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[24-Feb-2026 20:37:56 Europe/Berlin] Error worker ref=REFSSC-2026-0162: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 18:57:43 Europe/Berlin] Error worker ref=REFSSC-2026-0261: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 18:58:04 Europe/Berlin] Error worker ref=REFSSC-2026-0263: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 18:58:25 Europe/Berlin] Error worker ref=REFSSC-2026-0264: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 18:58:46 Europe/Berlin] Error worker ref=REFSSC-2026-0265: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 18:59:07 Europe/Berlin] Error worker ref=REFSSC-2026-0266: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:02:42 Europe/Berlin] Error worker ref=REFSSC-2026-0261: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:03:03 Europe/Berlin] Error worker ref=REFSSC-2026-0263: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:03:24 Europe/Berlin] Error worker ref=REFSSC-2026-0264: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:03:45 Europe/Berlin] Error worker ref=REFSSC-2026-0265: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:04:06 Europe/Berlin] Error worker ref=REFSSC-2026-0266: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:07:42 Europe/Berlin] Error worker ref=REFSSC-2026-0261: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:08:03 Europe/Berlin] Error worker ref=REFSSC-2026-0263: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:08:24 Europe/Berlin] Error worker ref=REFSSC-2026-0264: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:08:45 Europe/Berlin] Error worker ref=REFSSC-2026-0265: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:09:06 Europe/Berlin] Error worker ref=REFSSC-2026-0266: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:12:42 Europe/Berlin] Error worker ref=REFSSC-2026-0267: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:13:03 Europe/Berlin] Error worker ref=REFSSC-2026-0268: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:13:24 Europe/Berlin] Error worker ref=REFSSC-2026-0269: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:13:45 Europe/Berlin] Error worker ref=REFSSC-2026-0271: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:14:06 Europe/Berlin] Error worker ref=REFSSC-2026-0272: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:17:42 Europe/Berlin] Error worker ref=REFSSC-2026-0267: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:18:03 Europe/Berlin] Error worker ref=REFSSC-2026-0268: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:18:24 Europe/Berlin] Error worker ref=REFSSC-2026-0269: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:18:45 Europe/Berlin] Error worker ref=REFSSC-2026-0271: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:19:07 Europe/Berlin] Error worker ref=REFSSC-2026-0272: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:22:42 Europe/Berlin] Error worker ref=REFSSC-2026-0267: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:23:03 Europe/Berlin] Error worker ref=REFSSC-2026-0268: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:23:24 Europe/Berlin] Error worker ref=REFSSC-2026-0269: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:23:45 Europe/Berlin] Error worker ref=REFSSC-2026-0271: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:24:06 Europe/Berlin] Error worker ref=REFSSC-2026-0272: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:27:42 Europe/Berlin] Error worker ref=REFSSC-2026-0273: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:28:03 Europe/Berlin] Error worker ref=REFSSC-2026-0273: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:28:24 Europe/Berlin] Error worker ref=REFSSC-2026-0274: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:28:45 Europe/Berlin] Error worker ref=REFSSC-2026-0275: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:29:06 Europe/Berlin] Error worker ref=REFSSC-2026-0276: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:32:42 Europe/Berlin] Error worker ref=REFSSC-2026-0273: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:33:03 Europe/Berlin] Error worker ref=REFSSC-2026-0273: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:33:24 Europe/Berlin] Error worker ref=REFSSC-2026-0274: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:33:45 Europe/Berlin] Error worker ref=REFSSC-2026-0275: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:34:06 Europe/Berlin] Error worker ref=REFSSC-2026-0276: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:37:42 Europe/Berlin] Error worker ref=REFSSC-2026-0273: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:38:03 Europe/Berlin] Error worker ref=REFSSC-2026-0273: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:38:24 Europe/Berlin] Error worker ref=REFSSC-2026-0274: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:38:46 Europe/Berlin] Error worker ref=REFSSC-2026-0275: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:39:07 Europe/Berlin] Error worker ref=REFSSC-2026-0276: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:42:42 Europe/Berlin] Error worker ref=REFSSC-2026-0277: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:43:04 Europe/Berlin] Error worker ref=REFSSC-2026-0278: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:43:25 Europe/Berlin] Error worker ref=REFSSC-2026-0279: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:43:46 Europe/Berlin] Error worker ref=REFSSC-2026-0279: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:44:07 Europe/Berlin] Error worker ref=REFSSC-2026-0280: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:47:42 Europe/Berlin] Error worker ref=REFSSC-2026-0277: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:48:03 Europe/Berlin] Error worker ref=REFSSC-2026-0278: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:48:24 Europe/Berlin] Error worker ref=REFSSC-2026-0279: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:48:46 Europe/Berlin] Error worker ref=REFSSC-2026-0279: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:49:07 Europe/Berlin] Error worker ref=REFSSC-2026-0280: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:52:42 Europe/Berlin] Error worker ref=REFSSC-2026-0277: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:53:03 Europe/Berlin] Error worker ref=REFSSC-2026-0278: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:53:24 Europe/Berlin] Error worker ref=REFSSC-2026-0279: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:53:45 Europe/Berlin] Error worker ref=REFSSC-2026-0279: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:54:06 Europe/Berlin] Error worker ref=REFSSC-2026-0280: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:57:42 Europe/Berlin] Error worker ref=REFSSC-2026-0280: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:58:03 Europe/Berlin] Error worker ref=REFSSC-2026-0281: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:58:24 Europe/Berlin] Error worker ref=REFSSC-2026-0281: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:58:46 Europe/Berlin] Error worker ref=REFSSC-2026-0282: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 19:59:07 Europe/Berlin] Error worker ref=REFSSC-2026-0283: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:02:42 Europe/Berlin] Error worker ref=REFSSC-2026-0280: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:03:03 Europe/Berlin] Error worker ref=REFSSC-2026-0281: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:03:25 Europe/Berlin] Error worker ref=REFSSC-2026-0281: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:03:46 Europe/Berlin] Error worker ref=REFSSC-2026-0282: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:04:07 Europe/Berlin] Error worker ref=REFSSC-2026-0283: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:07:42 Europe/Berlin] Error worker ref=REFSSC-2026-0280: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:08:03 Europe/Berlin] Error worker ref=REFSSC-2026-0281: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:08:24 Europe/Berlin] Error worker ref=REFSSC-2026-0281: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:08:45 Europe/Berlin] Error worker ref=REFSSC-2026-0282: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:09:07 Europe/Berlin] Error worker ref=REFSSC-2026-0283: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:12:42 Europe/Berlin] Error worker ref=REFSSC-2026-0284: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:13:03 Europe/Berlin] Error worker ref=REFSSC-2026-0289: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:13:24 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:13:46 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:14:07 Europe/Berlin] Error worker ref=REFSSC-2026-0291: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:17:42 Europe/Berlin] Error worker ref=REFSSC-2026-0284: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:18:03 Europe/Berlin] Error worker ref=REFSSC-2026-0289: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:18:24 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:18:46 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:19:07 Europe/Berlin] Error worker ref=REFSSC-2026-0291: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:22:42 Europe/Berlin] Error worker ref=REFSSC-2026-0284: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:23:03 Europe/Berlin] Error worker ref=REFSSC-2026-0289: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:23:24 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:23:45 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:24:07 Europe/Berlin] Error worker ref=REFSSC-2026-0291: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:27:42 Europe/Berlin] Error worker ref=REFSSC-2026-0291: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:28:03 Europe/Berlin] Error worker ref=REFSSC-2026-0292: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:28:25 Europe/Berlin] Error worker ref=REFSSC-2026-0292: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:28:46 Europe/Berlin] Error worker ref=REFSSC-2026-0293: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:29:07 Europe/Berlin] Error worker ref=REFSSC-2026-0293: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:32:42 Europe/Berlin] Error worker ref=REFSSC-2026-0291: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:33:03 Europe/Berlin] Error worker ref=REFSSC-2026-0292: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:33:24 Europe/Berlin] Error worker ref=REFSSC-2026-0292: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:33:46 Europe/Berlin] Error worker ref=REFSSC-2026-0293: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:34:07 Europe/Berlin] Error worker ref=REFSSC-2026-0293: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:37:42 Europe/Berlin] Error worker ref=REFSSC-2026-0291: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:38:04 Europe/Berlin] Error worker ref=REFSSC-2026-0292: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:38:25 Europe/Berlin] Error worker ref=REFSSC-2026-0292: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:38:46 Europe/Berlin] Error worker ref=REFSSC-2026-0293: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:39:07 Europe/Berlin] Error worker ref=REFSSC-2026-0293: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:42:42 Europe/Berlin] Error worker ref=REFSSC-2026-0294: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:43:03 Europe/Berlin] Error worker ref=REFSSC-2026-0294: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:43:25 Europe/Berlin] Error worker ref=REFSSC-2026-0283: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:43:46 Europe/Berlin] Error worker ref=REFSSC-2026-0284: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:44:07 Europe/Berlin] Error worker ref=REFSSC-2026-0284: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:47:42 Europe/Berlin] Error worker ref=REFSSC-2026-0294: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:48:04 Europe/Berlin] Error worker ref=REFSSC-2026-0294: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:48:25 Europe/Berlin] Error worker ref=REFSSC-2026-0283: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:48:46 Europe/Berlin] Error worker ref=REFSSC-2026-0284: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:49:07 Europe/Berlin] Error worker ref=REFSSC-2026-0284: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:52:42 Europe/Berlin] Error worker ref=REFSSC-2026-0294: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:53:03 Europe/Berlin] Error worker ref=REFSSC-2026-0294: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:53:25 Europe/Berlin] Error worker ref=REFSSC-2026-0283: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:53:46 Europe/Berlin] Error worker ref=REFSSC-2026-0284: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:54:07 Europe/Berlin] Error worker ref=REFSSC-2026-0284: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:57:42 Europe/Berlin] Error worker ref=REFSSC-2026-0289: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:58:03 Europe/Berlin] Error worker ref=REFSSC-2026-0289: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:58:25 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:58:46 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 20:59:07 Europe/Berlin] Error worker ref=REFSSC-2026-0291: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:02:43 Europe/Berlin] Error worker ref=REFSSC-2026-0289: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:03:04 Europe/Berlin] Error worker ref=REFSSC-2026-0289: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:03:25 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:03:46 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:04:08 Europe/Berlin] Error worker ref=REFSSC-2026-0291: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:07:42 Europe/Berlin] Error worker ref=REFSSC-2026-0289: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:08:03 Europe/Berlin] Error worker ref=REFSSC-2026-0289: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:08:25 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:08:46 Europe/Berlin] Error worker ref=REFSSC-2026-0290: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:09:07 Europe/Berlin] Error worker ref=REFSSC-2026-0291: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:12:43 Europe/Berlin] Error worker ref=REFSSC-2026-0292: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:13:04 Europe/Berlin] Error worker ref=REFSSC-2026-0293: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:13:25 Europe/Berlin] Error worker ref=REFSSC-2026-0315: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:13:47 Europe/Berlin] Error worker ref=REFSSC-2026-0316: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:17:42 Europe/Berlin] Error worker ref=REFSSC-2026-0292: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:18:04 Europe/Berlin] Error worker ref=REFSSC-2026-0293: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:18:25 Europe/Berlin] Error worker ref=REFSSC-2026-0315: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:18:46 Europe/Berlin] Error worker ref=REFSSC-2026-0316: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:22:43 Europe/Berlin] Error worker ref=REFSSC-2026-0292: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:23:04 Europe/Berlin] Error worker ref=REFSSC-2026-0293: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:23:25 Europe/Berlin] Error worker ref=REFSSC-2026-0315: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[27-Feb-2026 21:23:46 Europe/Berlin] Error worker ref=REFSSC-2026-0316: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 15:54:15 Europe/Berlin] Error worker ref=REFSSC-2026-0261: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 15:54:36 Europe/Berlin] Error worker ref=REFSSC-2026-0263: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 15:54:57 Europe/Berlin] Error worker ref=REFSSC-2026-0264: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 15:55:18 Europe/Berlin] Error worker ref=REFSSC-2026-0265: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 15:55:39 Europe/Berlin] Error worker ref=REFSSC-2026-0266: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 15:57:42 Europe/Berlin] Error worker ref=REFSSC-2026-0261: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 15:58:03 Europe/Berlin] Error worker ref=REFSSC-2026-0263: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 15:58:24 Europe/Berlin] Error worker ref=REFSSC-2026-0264: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 15:58:46 Europe/Berlin] Error worker ref=REFSSC-2026-0265: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 15:59:07 Europe/Berlin] Error worker ref=REFSSC-2026-0266: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:02:42 Europe/Berlin] Error worker ref=REFSSC-2026-0261: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:03:03 Europe/Berlin] Error worker ref=REFSSC-2026-0263: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:03:24 Europe/Berlin] Error worker ref=REFSSC-2026-0264: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:03:45 Europe/Berlin] Error worker ref=REFSSC-2026-0265: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:04:07 Europe/Berlin] Error worker ref=REFSSC-2026-0266: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:07:42 Europe/Berlin] Error worker ref=REFSSC-2026-0267: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:08:03 Europe/Berlin] Error worker ref=REFSSC-2026-0268: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:08:24 Europe/Berlin] Error worker ref=REFSSC-2026-0269: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:08:45 Europe/Berlin] Error worker ref=REFSSC-2026-0271: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:09:06 Europe/Berlin] Error worker ref=REFSSC-2026-0272: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:12:42 Europe/Berlin] Error worker ref=REFSSC-2026-0267: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:13:03 Europe/Berlin] Error worker ref=REFSSC-2026-0268: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:13:24 Europe/Berlin] Error worker ref=REFSSC-2026-0269: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:13:45 Europe/Berlin] Error worker ref=REFSSC-2026-0271: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:14:07 Europe/Berlin] Error worker ref=REFSSC-2026-0272: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:17:42 Europe/Berlin] Error worker ref=REFSSC-2026-0267: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:18:03 Europe/Berlin] Error worker ref=REFSSC-2026-0268: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:18:24 Europe/Berlin] Error worker ref=REFSSC-2026-0269: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:18:45 Europe/Berlin] Error worker ref=REFSSC-2026-0271: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:19:07 Europe/Berlin] Error worker ref=REFSSC-2026-0272: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:22:42 Europe/Berlin] Error worker ref=REFSSC-2026-0273: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:23:03 Europe/Berlin] Error worker ref=REFSSC-2026-0273: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:23:24 Europe/Berlin] Error worker ref=REFSSC-2026-0274: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:23:45 Europe/Berlin] Error worker ref=REFSSC-2026-0275: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:24:07 Europe/Berlin] Error worker ref=REFSSC-2026-0276: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:27:42 Europe/Berlin] Error worker ref=REFSSC-2026-0273: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:28:03 Europe/Berlin] Error worker ref=REFSSC-2026-0273: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:28:24 Europe/Berlin] Error worker ref=REFSSC-2026-0274: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:28:45 Europe/Berlin] Error worker ref=REFSSC-2026-0275: SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[03-Mar-2026 16:29:07 Europe/Berlin] Error worker ref=REFSSC-2026-0276: SMTP Error: Could not connect to SMTP host. Failed to connect to server
