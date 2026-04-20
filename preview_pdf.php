@@ -183,6 +183,49 @@ try {
         $tmpFile = sys_get_temp_dir() . '/preview_inst_' . uniqid('', true) . '.pdf';
         file_put_contents($tmpFile, $dompdf->output());
 
+        /* ── Merge annexes if any ── */
+        $carpetaAnexos = __DIR__ . '/anexos_institucionales/' . ($reg['referencia_salida'] ?? '') . '/';
+        $anexos = [];
+        if (is_dir($carpetaAnexos)) {
+            $anexos = array_merge(
+                glob($carpetaAnexos . '*.pdf') ?: [],
+                glob($carpetaAnexos . '*.PDF') ?: []
+            );
+            sort($anexos);
+        }
+
+        if (!empty($anexos)) {
+            $tmpMerged = sys_get_temp_dir() . '/preview_merged_' . uniqid('', true) . '.pdf';
+            $pdfMerge = new Fpdi();
+            $pageCount = $pdfMerge->setSourceFile($tmpFile);
+            for ($p = 1; $p <= $pageCount; $p++) {
+                $tpl = $pdfMerge->importPage($p);
+                $sz  = $pdfMerge->getTemplateSize($tpl);
+                $pdfMerge->AddPage(($sz['width'] > $sz['height']) ? 'L' : 'P', [$sz['width'], $sz['height']]);
+                $pdfMerge->useTemplate($tpl);
+            }
+            foreach ($anexos as $anexo) {
+                $cnt = $pdfMerge->setSourceFile($anexo);
+                for ($p = 1; $p <= $cnt; $p++) {
+                    $tpl = $pdfMerge->importPage($p);
+                    $sz  = $pdfMerge->getTemplateSize($tpl);
+                    $pdfMerge->AddPage(($sz['width'] > $sz['height']) ? 'L' : 'P', [$sz['width'], $sz['height']]);
+                    $pdfMerge->useTemplate($tpl);
+                }
+            }
+            $pdfMerge->Output($tmpMerged, 'F');
+
+            register_shutdown_function(function () use ($tmpFile, $tmpMerged) {
+                if (file_exists($tmpFile))   @unlink($tmpFile);
+                if (file_exists($tmpMerged)) @unlink($tmpMerged);
+            });
+
+            if ($isSupervisor) {
+                outputPdfPlain($tmpMerged, 'PREVIEW_OFICIO_INST.pdf');
+            }
+            outputPdfWithWatermark($tmpMerged, 'PREVIEW_OFICIO_INST.pdf');
+        }
+
         register_shutdown_function(function () use ($tmpFile) {
             if (file_exists($tmpFile)) {
                 @unlink($tmpFile);
