@@ -559,8 +559,8 @@ $(document).ready(function() {
         oficioCounter++;
         peticionIdCounter++;
         const currentId = peticionIdCounter;
-        const template = $('#template_oficio').html();
-        const $nuevoOficio = $(template);
+        const $wrapperOficio = $('<div>').append(document.getElementById('template_oficio').content.cloneNode(true));
+        const $nuevoOficio = $wrapperOficio.find('.oficio-entrada-row');
         $nuevoOficio.find('[data-oficio-index]').attr('data-oficio-index', oficioCounter);
         $nuevoOficio.find('.btn-add-peticion').attr('data-oficio-index', oficioCounter);
         $nuevoOficio.find('.oficio-num-display').text(oficioCounter);
@@ -586,8 +586,8 @@ $(document).ready(function() {
         const oficioBloque = $(this).closest('.oficio-entrada-row');
         const container = oficioBloque.find('.peticiones-container');
         const peticionCount = container.find('.peticion-item').length + 1;
-        const template = $('#template_peticion').html();
-        const $nuevaPeticion = $(template);
+        const $wrapperPeticion = $('<div>').append(document.getElementById('template_peticion').content.cloneNode(true));
+        const $nuevaPeticion = $wrapperPeticion.find('.peticion-item');
         $nuevaPeticion.find('.peticion-num').text(peticionCount);
         $nuevaPeticion.attr('data-peticion-id', currentId);
         container.append($nuevaPeticion);
