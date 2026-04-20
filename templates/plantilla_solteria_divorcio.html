@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+
+<style>
+
+/* PDF sin márgenes para que el fondo cubra toda la hoja */
+@page{
+size: letter portrait;
+margin:0;
+}
+
+html,body{
+width:100%;
+height:100%;
+}
+
+body {
+    font-family: 'DejaVu Sans', sans-serif;
+    {{background_style}}
+    margin: 0;
+    padding: 0;
+    color: #000;
+    /* Esto aplicará el tamaño a TODO el documento por defecto */
+    font-size: 8pt !important; 
+}
+
+.content { 
+            text-align: justify; 
+            line-height: 1.0; 
+            margin-bottom: 10px; 
+            font-size: 11pt; 
+        }
+        
+        .indent { 
+            
+             text-align: justify; 
+            line-height: 1.0; 
+            margin-bottom: 10px; 
+            font-size: 11pt;  
+        }
+
+/* CONTENEDOR */
+
+.page-content{
+padding:80px 90px 60px 90px;
+box-sizing:border-box;
+}
+
+/* HEADER */
+
+.header{
+text-align:center;
+margin-bottom:20px;
+}
+
+.logo-img{
+width:110px;
+}
+
+/* TITULO */
+
+.titulo{
+text-align:center;
+font-weight:bold;
+font-size:12pt;
+margin-top:5px;
+margin-bottom:15px;
+}
+
+/* TEXTO */
+
+
+
+
+/* FIRMA */
+
+.signature{
+text-align:center;
+margin-top:20px;
+}
+
+.signature-img{
+width:260px;
+}
+
+/* QR */
+
+.qr-container{
+position:absolute;
+bottom:40px;
+right:40px;
+}
+
+.qr-img{
+width:110px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="page-content">
+
+<div class="header">
+{{escudo_img}}
+</div>
+
+<p class="titulo">CERTIFICACION DE ESTADO FAMILIAR original</p>
+
+<p style="text-align:left; margin-bottom:15px; font-weight: bold;">A QUIEN CORRESPONDA:</p>
+
+<p class="content indent">
+
+El Infrascrito Registrador del Estado Familiar de San Salvador Centro,
+<strong>HACE CONSTAR QUE</strong> a esta oficina se presentó
+<strong>{{nombre_solicitante}}</strong>, con Documento Único de Identidad número
+<strong>{{numero_documento}}</strong>, a solicitar certificación de estado familiar.
+
+</p>
+
+<p class="content indent">
+
+Habiéndose efectuado la respectiva búsqueda en los registros de nuestra base de datos
+que corresponde únicamente al Distrito de San Salvador Sede, hasta el día
+<strong>{{fecha_emision_texto}}</strong>.
+
+Se encontró Partida de Nacimiento marginada por
+<strong>MATRIMONIO Y DIVORCIO</strong> a nombre de
+<strong>{{nombre_no_registro}}</strong>, inscrita con el número
+<strong>{{numero_partida}}</strong>, folio
+<strong>{{folio}}</strong>, del libro
+<strong>{{libro}}</strong>, del año
+<strong>{{anio}}</strong>, del Registro del Estado Familiar
+del Distrito de San Salvador Sede, San Salvador Centro.
+
+</p>
+
+<p class="content indent">
+
+<strong>DE CONFORMIDAD</strong> al Decreto Legislativo número 605 que reforma
+el artículo 186 del Código de Familia, referente al estado familiar de una persona,
+se expresa en su orden tercero que es “soltera o soltero, quien no ha contraído
+matrimonio o cuyo matrimonio ha sido anulado o disuelto por divorcio”
+disposición que entró en vigencia el 1 de marzo del año 2017.
+
+<strong>POR TANTO:</strong> El Estado Familiar del(la) inscrito(a)
+es <strong>“SOLTERO(A)”</strong>.
+
+</p>
+
+<p class="content indent">
+
+Se extiende la presente en Distrito de San Salvador Sede,
+San Salvador Centro, San Salvador,
+{{fecha_emision_texto}}.
+
+Se advierte que este Registro del Estado Familiar no es responsable
+por la inexactitud o falsedad de los datos proporcionados en la presente.
+
+<strong>CUALQUIER ALTERACIÓN ANULA EL PRESENTE DOCUMENTO.</strong>
+
+</p>
+
+<div class="signature">
+
+{{imagen_firma}}
+
+<p><strong>LICDA. KARLA MARIELA OLIVARES MARTÍNEZ</strong></p>
+<p><strong>REGISTRADOR DEL ESTADO FAMILIAR</strong></p>
+<p><strong>DE SAN SALVADOR CENTRO</strong></p>
+
+</div>
+
+<div class="qr-container">
+{{codigo_qr}}
+</div>
+
+</div>
+
+</body>
+</html>
