@@ -455,7 +455,7 @@ $ruta_pdf = $doc['ruta_pdf_final'] ?? '';
             <a href="editar_oficio.php?id=<?php echo $id; ?>" class="btn btn-sm btn-info">Editar</a>
         <?php elseif ($es_const): ?>
             <a href="editar_constancia.php?id=<?php echo $id; ?>" class="btn btn-sm btn-info">Editar</a>
-        <?php elseif ($es_oficio_inst && !$pendiente): ?>
+        <?php elseif ($es_oficio_inst): ?>
             <a href="editar_oficio_institucional.php?id=<?php echo $id; ?>" class="btn btn-sm btn-info">Editar</a>
         <?php endif; ?>
     <?php endif; ?>

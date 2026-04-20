@@ -3127,19 +3127,23 @@ CREATE TABLE IF NOT EXISTS `oficios_institucionales` (
   `id_institucion` int(11) DEFAULT NULL,
   `email_envio` varchar(255) DEFAULT NULL,
   `fecha_documento` date DEFAULT NULL,
+  `fecha_aprobacion` datetime DEFAULT NULL,
+  `aprobado_por` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `referencia_salida` (`referencia_salida`),
   KEY `id_institucion` (`id_institucion`),
   KEY `creado_por` (`creado_por`),
+  KEY `aprobado_por` (`aprobado_por`),
   CONSTRAINT `oficios_institucionales_ibfk_1` FOREIGN KEY (`id_institucion`) REFERENCES `instituciones` (`id`),
-  CONSTRAINT `oficios_institucionales_ibfk_2` FOREIGN KEY (`creado_por`) REFERENCES `usuarios` (`id`)
+  CONSTRAINT `oficios_institucionales_ibfk_2` FOREIGN KEY (`creado_por`) REFERENCES `usuarios` (`id`),
+  CONSTRAINT `oficios_institucionales_ibfk_3` FOREIGN KEY (`aprobado_por`) REFERENCES `usuarios` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla registro_oficios.oficios_institucionales: ~0 rows (aproximadamente)
 DELETE FROM `oficios_institucionales`;
-INSERT INTO `oficios_institucionales` (`id`, `referencia_salida`, `correlativo_anual`, `fecha`, `creado_por`, `estado_validacion`, `ruta_pdf_final`, `id_institucion`, `email_envio`, `fecha_documento`) VALUES
-	(47, 'REFSSCINS-2026-0510', 510, '2026-04-19 16:47:23', 3, 'APROBADO', NULL, 8, NULL, '2026-04-20'),
-	(48, 'REFSSCINS-2026-0511', 511, '2026-04-19 17:23:33', 3, 'PENDIENTE', NULL, 7, NULL, '2026-04-20');
+INSERT INTO `oficios_institucionales` (`id`, `referencia_salida`, `correlativo_anual`, `fecha`, `creado_por`, `estado_validacion`, `ruta_pdf_final`, `id_institucion`, `email_envio`, `fecha_documento`, `fecha_aprobacion`, `aprobado_por`) VALUES
+	(47, 'REFSSCINS-2026-0510', 510, '2026-04-19 16:47:23', 3, 'APROBADO', NULL, 8, NULL, '2026-04-20', NULL, NULL),
+	(48, 'REFSSCINS-2026-0511', 511, '2026-04-19 17:23:33', 3, 'PENDIENTE', NULL, 7, NULL, '2026-04-20', NULL, NULL);
 
 -- Volcando estructura para tabla registro_oficios.oficios_institucionales_detalle
 CREATE TABLE IF NOT EXISTS `oficios_institucionales_detalle` (

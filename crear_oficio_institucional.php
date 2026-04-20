@@ -159,6 +159,17 @@ function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
                     </div>
                 </div>
 
+                <div class="form-row mt-2">
+                    <div class="form-group col-md-6">
+                        <label class="small font-weight-bold">Email de Envío:</label>
+                        <input type="email" name="email_envio" id="email_envio" class="form-control" placeholder="Opcional — se auto-completa con el de la institución">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="small font-weight-bold text-danger">Fecha del Documento <span class="text-danger">*</span>:</label>
+                        <input type="date" name="fecha_documento" id="fecha_documento" class="form-control" value="<?php echo date('Y-m-d'); ?>" required>
+                    </div>
+                </div>
+
                 <div id="panel-nueva-institucion" style="display:none;" class="mb-3">
                     <p class="font-weight-bold text-dark">⚠️ Institución no registrada. Complete los datos (opcionales) para activarla:</p>
                     <div class="form-row">
@@ -480,6 +491,9 @@ $(document).ready(function() {
             $('#panel-nueva-institucion').slideUp();
             const email = $(data.element).data('email');
             $('#email_institucional_existente').val(email);
+            if (email && !$('#email_envio').val()) {
+                $('#email_envio').val(email);
+            }
         }
     });
 

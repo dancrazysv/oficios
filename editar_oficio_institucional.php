@@ -11,10 +11,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $rol = $_SESSION['user_rol'] ?? 'normal';
 $nombre_usuario = $_SESSION['nombre_usuario'] ?? 'Usuario';
 $area_usuario = $_SESSION['area'] ?? '';
-
-if (!in_array($rol, ['administrador', 'supervisor'], true)) {
-    die("Acceso denegado. No tienes permisos para editar este registro.");
-}
+$user_id = (int)($_SESSION['user_id'] ?? 0);
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$id) {
@@ -48,6 +45,15 @@ try {
         die("Oficio no encontrado.");
     }
 
+    $puede_editar = in_array($rol, ['administrador', 'supervisor'], true)
+        || ($rol === 'normal'
+            && (int)$oficio['creado_por'] === $user_id
+            && $oficio['estado_validacion'] === 'PENDIENTE');
+
+    if (!$puede_editar) {
+        die("Acceso denegado. No tienes permisos para editar este registro.");
+    }
+
     $stmt_ent = $pdo->prepare("
         SELECT *
         FROM oficios_institucionales_entradas
@@ -56,6 +62,15 @@ try {
     ");
     $stmt_ent->execute([$id]);
     $entradas_raw = $stmt_ent->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt_det = $pdo->prepare("
+        SELECT *
+        FROM oficios_institucionales_detalle
+        WHERE id_oficio_inst = ?
+        ORDER BY id ASC
+    ");
+    $stmt_det->execute([$id]);
+    $detalles = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
 
     $stmt_inst = $pdo->query("
         SELECT id, nombre_institucion, unidad_dependencia, email_contacto, ubicacion_sede
@@ -243,12 +258,154 @@ foreach ($entradas_raw as $ent) {
             </div>
         </div>
 
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <span class="font-weight-bold">III. RESULTADOS DE BÚSQUEDA</span>
+                <button type="button" id="btn_add_persona" class="btn btn-success btn-sm font-weight-bold">+ Agregar Registro</button>
+            </div>
+            <div class="card-body bg-light" id="contenedor_personas">
+                <?php if (empty($detalles)): ?>
+                    <p class="text-muted small">No hay resultados registrados aún. Use el botón para agregar.</p>
+                <?php else: ?>
+                    <?php foreach ($detalles as $det):
+                        $is_found  = ($det['resultado'] === 'ENCONTRADO');
+                        $is_family = in_array($det['tipo_tramite'], ['MATRIMONIO', 'DIVORCIO'], true);
+                    ?>
+                        <div class="persona-row mb-4 shadow-sm">
+                            <span class="btn-remove">&times;</span>
+                            <input type="hidden" name="detalle_id[]" value="<?php echo (int)$det['id']; ?>">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label class="small font-weight-bold">Nombre en Nuestros Registros:</label>
+                                    <input type="text" name="nombre_consultado[]" class="form-control text-uppercase form-control-sm" value="<?php echo e($det['nombre_consultado']); ?>" required>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="small font-weight-bold">Tipo Trámite:</label>
+                                    <select name="tipo_tramite[]" class="form-control form-control-sm sel-tipo-tramite">
+                                        <option value="NACIMIENTO" <?php echo (($det['tipo_tramite'] ?? '') === 'NACIMIENTO') ? 'selected' : ''; ?>>NACIMIENTO</option>
+                                        <option value="DEFUNCION"  <?php echo (($det['tipo_tramite'] ?? '') === 'DEFUNCION')  ? 'selected' : ''; ?>>DEFUNCIÓN</option>
+                                        <option value="MATRIMONIO" <?php echo (($det['tipo_tramite'] ?? '') === 'MATRIMONIO') ? 'selected' : ''; ?>>MATRIMONIO</option>
+                                        <option value="DIVORCIO"   <?php echo (($det['tipo_tramite'] ?? '') === 'DIVORCIO')   ? 'selected' : ''; ?>>DIVORCIO</option>
+                                        <option value="CEDULA"     <?php echo (($det['tipo_tramite'] ?? '') === 'CEDULA')     ? 'selected' : ''; ?>>CÉDULA</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="small font-weight-bold">Resultado:</label>
+                                    <select name="resultado[]" class="form-control form-control-sm sel-resultado" required>
+                                        <option value="ENCONTRADO"    <?php echo (($det['resultado'] ?? '') === 'ENCONTRADO')    ? 'selected' : ''; ?>>ENCONTRADO</option>
+                                        <option value="NO_ENCONTRADO" <?php echo (($det['resultado'] ?? '') === 'NO_ENCONTRADO') ? 'selected' : ''; ?>>NO ENCONTRADO</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="small font-weight-bold">Observaciones:</label>
+                                    <input type="text" name="observaciones[]" class="form-control form-control-sm" value="<?php echo e($det['observaciones']); ?>">
+                                </div>
+                            </div>
+                            <div class="panel-data">
+                                <div class="form-row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="small font-weight-bold lbl-filiacion-1"><?php echo $is_family ? 'Cónyuge 1:' : 'Madre:'; ?></label>
+                                        <input type="text" name="padre_conyuge_1[]" class="form-control form-control-sm text-uppercase" value="<?php echo e($det['filiacion_1']); ?>">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small font-weight-bold lbl-filiacion-2"><?php echo $is_family ? 'Cónyuge 2:' : 'Padre:'; ?></label>
+                                        <input type="text" name="padre_conyuge_2[]" class="form-control form-control-sm text-uppercase" value="<?php echo e($det['filiacion_2']); ?>">
+                                    </div>
+                                </div>
+                                <div class="form-row panel-partida <?php echo $is_found ? '' : 'd-none'; ?>">
+                                    <div class="col-md-3"><label class="small">Partida N°:</label><input type="text" name="partida[]" class="form-control form-control-sm" value="<?php echo e($det['partida_numero']); ?>"></div>
+                                    <div class="col-md-3"><label class="small">Folio:</label><input type="text" name="folio[]" class="form-control form-control-sm" value="<?php echo e($det['partida_folio']); ?>"></div>
+                                    <div class="col-md-3"><label class="small">Libro:</label><input type="text" name="libro[]" class="form-control form-control-sm" value="<?php echo e($det['partida_libro']); ?>"></div>
+                                    <div class="col-md-3"><label class="small">Año:</label><input type="number" name="anio[]" class="form-control form-control-sm" value="<?php echo e($det['partida_anio']); ?>" min="1900" max="<?php echo date('Y'); ?>"></div>
+                                </div>
+                                <div class="form-row panel-fecha mt-2">
+                                    <div class="col-md-4"><label class="small font-weight-bold">Fecha del Evento:</label><input type="date" name="fecha_evento[]" class="form-control form-control-sm" value="<?php echo e($det['fecha_evento']); ?>"></div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-info text-white font-weight-bold">IV. ARCHIVOS ADJUNTOS</div>
+            <div class="card-body">
+                <?php if (!empty($archivos_adjuntos)): ?>
+                    <p class="small text-muted mb-2">Archivos actuales (marque para eliminar):</p>
+                    <?php foreach ($archivos_adjuntos as $archivo): ?>
+                        <div class="mb-1">
+                            📎 <?php echo e($archivo); ?>
+                            <label class="ml-2">
+                                <input type="checkbox" name="eliminar_adjunto[]" value="<?php echo e($archivo); ?>" style="vertical-align:middle;"> Eliminar
+                            </label>
+                        </div>
+                    <?php endforeach; ?>
+                    <hr>
+                <?php endif; ?>
+                <div class="form-group">
+                    <label class="small font-weight-bold">Agregar nuevos archivos PDF:</label>
+                    <input type="file" name="archivos_adjuntos[]" id="archivos_adjuntos" class="form-control-file" multiple accept="application/pdf">
+                    <small class="form-text text-muted">Solo archivos PDF. Máximo 10 MB por archivo.</small>
+                    <div id="adjunto_error" class="text-danger small mt-1"></div>
+                </div>
+            </div>
+        </div>
+
         <div class="text-right pb-5">
             <a href="ver_oficio_institucional.php?id=<?php echo (int)$oficio['id']; ?>" class="btn btn-secondary mr-2">Cancelar</a>
             <button type="submit" id="btnSubmit" class="btn btn-primary btn-lg shadow">💾 Guardar Cambios</button>
         </div>
     </form>
 </div>
+
+<template id="template_persona">
+    <div class="persona-row mb-4 shadow-sm">
+        <span class="btn-remove">&times;</span>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="small font-weight-bold">Nombre en Nuestros Registros:</label>
+                <input type="text" name="nombre_consultado[]" class="form-control text-uppercase form-control-sm" required>
+            </div>
+            <div class="form-group col-md-2">
+                <label class="small font-weight-bold">Tipo Trámite:</label>
+                <select name="tipo_tramite[]" class="form-control form-control-sm sel-tipo-tramite">
+                    <option value="NACIMIENTO">NACIMIENTO</option>
+                    <option value="DEFUNCION">DEFUNCIÓN</option>
+                    <option value="MATRIMONIO">MATRIMONIO</option>
+                    <option value="DIVORCIO">DIVORCIO</option>
+                    <option value="CEDULA">CÉDULA</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label class="small font-weight-bold">Resultado:</label>
+                <select name="resultado[]" class="form-control form-control-sm sel-resultado" required>
+                    <option value="NO_ENCONTRADO">NO ENCONTRADO</option>
+                    <option value="ENCONTRADO">ENCONTRADO</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="small font-weight-bold">Observaciones:</label>
+                <input type="text" name="observaciones[]" class="form-control form-control-sm">
+            </div>
+        </div>
+        <div class="panel-data">
+            <div class="form-row mb-3">
+                <div class="col-md-6"><label class="small font-weight-bold lbl-filiacion-1">Nombre de la Madre:</label><input type="text" name="padre_conyuge_1[]" class="form-control form-control-sm text-uppercase"></div>
+                <div class="col-md-6"><label class="small font-weight-bold lbl-filiacion-2">Nombre del Padre:</label><input type="text" name="padre_conyuge_2[]" class="form-control form-control-sm text-uppercase"></div>
+            </div>
+            <div class="form-row panel-partida d-none">
+                <div class="col-md-3"><label class="small">Partida N°:</label><input type="text" name="partida[]" class="form-control form-control-sm"></div>
+                <div class="col-md-3"><label class="small">Folio:</label><input type="text" name="folio[]" class="form-control form-control-sm"></div>
+                <div class="col-md-3"><label class="small">Libro:</label><input type="text" name="libro[]" class="form-control form-control-sm"></div>
+                <div class="col-md-3"><label class="small">Año:</label><input type="number" name="anio[]" class="form-control form-control-sm"></div>
+            </div>
+            <div class="form-row panel-fecha mt-2">
+                <div class="col-md-4"><label class="small font-weight-bold">Fecha del Evento:</label><input type="date" name="fecha_evento[]" class="form-control form-control-sm"></div>
+            </div>
+        </div>
+    </div>
+</template>
 
 <template id="template_oficio_bloque">
     <div class="oficio-bloque">
@@ -373,6 +530,66 @@ $(document).ready(function() {
         } else {
             alert('Debe existir al menos un oficio de entrada.');
         }
+    });
+
+    /* ── Personas / Resultados ── */
+    function addPersonaRow() {
+        $('#contenedor_personas').append(document.getElementById('template_persona').content.cloneNode(true));
+        $('.sel-tipo-tramite').last().trigger('change');
+        $('.sel-resultado').last().trigger('change');
+    }
+    if ($('#contenedor_personas .persona-row').length === 0) {
+        addPersonaRow();
+    }
+    $('#btn_add_persona').click(addPersonaRow);
+
+    $(document).on('click', '.btn-remove', function() {
+        if ($('.persona-row').length > 1) {
+            $(this).closest('.persona-row').remove();
+        }
+    });
+
+    $(document).on('change', '.sel-tipo-tramite', function() {
+        const row = $(this).closest('.persona-row');
+        const isFamily = ($(this).val() === 'MATRIMONIO' || $(this).val() === 'DIVORCIO');
+        row.find('.lbl-filiacion-1').text(isFamily ? 'Nombre del Cónyuge 1:' : 'Nombre de la Madre:');
+        row.find('.lbl-filiacion-2').text(isFamily ? 'Nombre del Cónyuge 2:' : 'Nombre del Padre:');
+    });
+
+    $(document).on('change', '.sel-resultado', function() {
+        const row = $(this).closest('.persona-row');
+        if ($(this).val() === 'ENCONTRADO') {
+            row.find('.panel-partida').removeClass('d-none');
+            row.css('border-left', '5px solid #28a745');
+        } else {
+            row.find('.panel-partida').addClass('d-none');
+            row.css('border-left', '5px solid #ffc107');
+        }
+    });
+
+    $('.sel-tipo-tramite').trigger('change');
+    $('.sel-resultado').trigger('change');
+
+    /* ── Adjuntos ── */
+    $('#archivos_adjuntos').on('change', function() {
+        const $error = $('#adjunto_error');
+        $error.text('');
+        for (const file of this.files) {
+            if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                $error.text('❌ Solo se permiten archivos PDF.');
+                this.value = '';
+                return;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                $error.text('❌ El archivo "' + file.name + '" excede 10 MB.');
+                this.value = '';
+                return;
+            }
+        }
+    });
+
+    $('#formEditarOficioInst').on('submit', function() {
+        $('#btnSubmit').prop('disabled', true).html('Guardando...');
     });
 });
 </script>

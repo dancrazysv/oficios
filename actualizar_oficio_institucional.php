@@ -5,9 +5,7 @@ require_once __DIR__ . '/check_session.php';
 require_once __DIR__ . '/db_config.php';
 
 $rol = $_SESSION['user_rol'] ?? 'normal';
-if (!in_array($rol, ['administrador', 'supervisor'], true)) {
-    die("Acceso denegado. No tienes permisos para editar este registro.");
-}
+$user_id = (int)($_SESSION['user_id'] ?? 0);
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     die("Método no permitido.");
@@ -20,6 +18,18 @@ if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
 $id_oficio = filter_input(INPUT_POST, 'id_oficio', FILTER_VALIDATE_INT);
 if (!$id_oficio) {
     die("ID de oficio inválido.");
+}
+
+/* Verificar permisos: admin/supervisor siempre; normal solo si es dueño y está PENDIENTE */
+if (!in_array($rol, ['administrador', 'supervisor'], true)) {
+    $stmt_perm = $pdo->prepare("SELECT creado_por, estado_validacion FROM oficios_institucionales WHERE id = ?");
+    $stmt_perm->execute([$id_oficio]);
+    $perm_row = $stmt_perm->fetch(PDO::FETCH_ASSOC);
+    if (!$perm_row
+        || (int)$perm_row['creado_por'] !== $user_id
+        || $perm_row['estado_validacion'] !== 'PENDIENTE') {
+        die("Acceso denegado. No tienes permisos para editar este registro.");
+    }
 }
 
 try {

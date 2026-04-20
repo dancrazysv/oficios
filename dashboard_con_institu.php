@@ -451,6 +451,9 @@ $es_ajeno = ((int)$doc['creado_por'] !== $user_id);
 <a href="view_pdf.php?type=<?php echo $tipo; ?>&id=<?php echo $id; ?>" target="_blank" class="btn btn-sm btn-outline-secondary">Revisar</a>
 <?php elseif ($rol === 'normal'): ?>
 <a href="preview_pdf.php?id=<?php echo $id; ?>&type=<?php echo $tipo; ?>" target="_blank" class="btn btn-sm btn-preview">Vista Previa</a>
+<?php if ($es_oficio_inst): ?>
+<a href="editar_oficio_institucional.php?id=<?php echo $id; ?>" class="btn btn-sm btn-info">Editar</a>
+<?php endif; ?>
 <?php endif; ?>
 <?php endif; ?>
 <?php if ($aprobado): ?>
