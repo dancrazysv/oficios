@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 session_start();
-require_once __DIR__.'/db_config.php';
+require_once __DIR__ . '/db_config.php';
 
-$creado_por_id = $_SESSION['user_id'] ?? $_SESSION['usuario_id'] ?? null;
+$creado_por_id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
 
-if (!$creado_por_id) {
+if ($creado_por_id <= 0) {
     header('Content-Type: application/json');
     die(json_encode(['success' => false, 'msg' => 'Error: Sesión expirada']));
 }

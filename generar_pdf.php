@@ -1,14 +1,14 @@
 <?php
-include 'check_session.php';
-include 'db_config.php';
+declare(strict_types=1);
+require_once __DIR__ . '/check_session.php';
+require_once __DIR__ . '/db_config.php';
 
 ob_start();
 header('Content-Type: application/json; charset=utf-8');
 
 date_default_timezone_set('America/El_Salvador');
-setlocale(LC_TIME, 'es_ES.UTF-8', 'es_ES', 'es_SV', 'spanish');
 
-require 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -26,6 +26,14 @@ function getNombreById($pdo, $tabla, $id) {
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     ob_clean();
     echo json_encode(['success' => false, 'message' => 'Método no permitido.']);
+    exit;
+}
+
+/* CSRF */
+if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
+    ob_clean();
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Error de validación de seguridad (CSRF).']);
     exit;
 }
 
@@ -98,7 +106,9 @@ try {
     $dist_origen_nom   = getNombreById($pdo, 'distritos', $distrito_origen_id);
 
     $fecha_creacion = date('Y-m-d H:i:s');
-    $fecha_display  = strftime('%d de %B de %Y', strtotime($fecha_creacion));
+    $meses_es = ['','enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    $ts_fecha = strtotime($fecha_creacion);
+    $fecha_display = date('d', $ts_fecha) . ' de ' . $meses_es[(int)date('n', $ts_fecha)] . ' de ' . date('Y', $ts_fecha);
     $estado_inicial = ($user_rol === 'normal') ? 'PENDIENTE' : 'APROBADO';
 
     /* ===================== GUARDAR EN BASE DE DATOS ===================== */

@@ -1,7 +1,24 @@
 <?php
+declare(strict_types=1);
 session_start();
 require_once __DIR__ . '/db_config.php';
 header('Content-Type: application/json');
+
+/* Autenticación */
+$user_id  = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
+if ($user_id <= 0) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'msg' => 'Sesión expirada.']);
+    exit;
+}
+
+/* CSRF */
+if ($_SERVER['REQUEST_METHOD'] !== 'POST'
+    || !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'msg' => 'Error de seguridad: Token inválido']);
+    exit;
+}
 
 try {
     if (!$pdo->inTransaction()) $pdo->beginTransaction();
@@ -15,6 +32,15 @@ try {
     $old_data = $stmt_old->fetch(PDO::FETCH_ASSOC);
 
     if (!$old_data) throw new Exception("Registro no encontrado.");
+
+    /* Control de acceso: normal solo puede editar su propia constancia PENDIENTE */
+    $user_rol = (string)($_SESSION['user_rol'] ?? '');
+    if (!in_array($user_rol, ['administrador', 'supervisor'], true)) {
+        $creado_por = (int)($old_data['creado_por_id'] ?? 0);
+        if ($creado_por !== $user_id || ($old_data['estado_validacion'] ?? '') !== 'PENDIENTE') {
+            throw new Exception("Acceso denegado.");
+        }
+    }
 
     $tipo = $_POST['tipo_constancia_id'] ?? $old_data['tipo_constancia'];
     

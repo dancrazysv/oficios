@@ -33,29 +33,29 @@
 
     <div class="destinatario">A QUIEN CORRESPONDA:</div>
 
-    <div class="referencia">OFICIO No. <?= $referencia_salida ?></div>
+    <div class="referencia">OFICIO No. <?= htmlspecialchars((string)($referencia_salida ?? ''), ENT_QUOTES, 'UTF-8') ?></div>
 
     <div class="cuerpo">
         <div class="parrafo">
             En atención a su(s) Oficio(s) número(s) 
-            <span class="negrita"><?= $numeros_oficios_in ?></span>, 
-            con Referencia(s) <span class="negrita"><?= $referencias_exp_in ?></span>, 
-            de <span class="negrita"><?= $nombre_institucion ?></span>; 
-            de fecha(s) <span class="negrita"><?= $fechas_docs_in ?></span>, 
-            en el cual solicita se remita <span class="negrita"><?= $tipos_tramite_solicitados ?></span> 
-            a nombre de: <span class="negrita uppercase"><?= $nombres_solicitados_oficio ?></span>.
+            <span class="negrita"><?= htmlspecialchars((string)($numeros_oficios_in ?? ''), ENT_QUOTES, 'UTF-8') ?></span>, 
+            con Referencia(s) <span class="negrita"><?= htmlspecialchars((string)($referencias_exp_in ?? ''), ENT_QUOTES, 'UTF-8') ?></span>, 
+            de <span class="negrita"><?= htmlspecialchars((string)($nombre_institucion ?? ''), ENT_QUOTES, 'UTF-8') ?></span>; 
+            de fecha(s) <span class="negrita"><?= htmlspecialchars((string)($fechas_docs_in ?? ''), ENT_QUOTES, 'UTF-8') ?></span>, 
+            en el cual solicita se remita <span class="negrita"><?= htmlspecialchars((string)($tipos_tramite_solicitados ?? ''), ENT_QUOTES, 'UTF-8') ?></span> 
+            a nombre de: <span class="negrita uppercase"><?= htmlspecialchars((string)($nombres_solicitados_oficio ?? ''), ENT_QUOTES, 'UTF-8') ?></span>.
         </div>
 
         <div class="parrafo">
             Habiéndose efectuado la respectiva búsqueda en los registros de nuestra base de datos que corresponde únicamente al Distrito de San Salvador Sede, se informa lo siguiente:
             <br><br>
             <?php foreach($detalles as $det): ?>
-                • <span class="negrita uppercase"><?= $det['resultado'] ?></span> registro de <?= strtolower($det['tipo_tramite']) ?> a nombre de <span class="negrita uppercase"><?= $det['nombre_consultado'] ?></span>, 
+                • <span class="negrita uppercase"><?= htmlspecialchars((string)($det['resultado'] ?? ''), ENT_QUOTES, 'UTF-8') ?></span> registro de <?= htmlspecialchars(strtolower((string)($det['tipo_tramite'] ?? '')), ENT_QUOTES, 'UTF-8') ?> a nombre de <span class="negrita uppercase"><?= htmlspecialchars((string)($det['nombre_consultado'] ?? ''), ENT_QUOTES, 'UTF-8') ?></span>, 
                 <?php if($det['resultado'] == 'ENCONTRADO'): ?>
-                    asentada bajo el número <span class="negrita"><?= $det['partida_numero'] ?></span>, 
-                    folio <span class="negrita"><?= $det['partida_folio'] ?></span>, 
-                    libro <span class="negrita"><?= $det['partida_libro'] ?></span>, 
-                    del año <span class="negrita"><?= $det['partida_anio'] ?></span>.
+                    asentada bajo el número <span class="negrita"><?= htmlspecialchars((string)($det['partida_numero'] ?? ''), ENT_QUOTES, 'UTF-8') ?></span>, 
+                    folio <span class="negrita"><?= htmlspecialchars((string)($det['partida_folio'] ?? ''), ENT_QUOTES, 'UTF-8') ?></span>, 
+                    libro <span class="negrita"><?= htmlspecialchars((string)($det['partida_libro'] ?? ''), ENT_QUOTES, 'UTF-8') ?></span>, 
+                    del año <span class="negrita"><?= htmlspecialchars((string)($det['partida_anio'] ?? ''), ENT_QUOTES, 'UTF-8') ?></span>.
                 <?php else: ?>
                     no encontrándose registro alguno en los libros cronológicos y auxiliares de este registro.
                 <?php endif; ?>
@@ -64,7 +64,7 @@
         </div>
 
         <div class="parrafo">
-            Se extiende la presente en Distrito de San Salvador Sede, San Salvador Centro, San Salvador, el día <span class="negrita"><?= $fecha_letras ?></span>. 
+            Se extiende la presente en Distrito de San Salvador Sede, San Salvador Centro, San Salvador, el día <span class="negrita"><?= htmlspecialchars((string)($fecha_letras ?? ''), ENT_QUOTES, 'UTF-8') ?></span>. 
             Se advierte que este Registro del Estado Familiar no es responsable por la inexactitud o falsedad de los datos proporcionados en la presente. 
             <span class="negrita">CUALQUIER ALTERACIÓN ANULA EL PRESENTE DOCUMENTO.</span>
         </div>
@@ -72,7 +72,7 @@
 
     <div class="footer">
         <div class="firma">
-            LICDA. <?= $nombre_registrador ?><br>
+            LICDA. <?= htmlspecialchars((string)($nombre_registrador ?? ''), ENT_QUOTES, 'UTF-8') ?><br>
             REGISTRADOR DEL ESTADO FAMILIAR<br>
             DE SAN SALVADOR CENTRO
         </div>
