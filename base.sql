@@ -723,6 +723,7 @@ CREATE TABLE IF NOT EXISTS `constancias` (
   `def_distrito_id` int(11) DEFAULT NULL,
   `mat_contrayente_1` varchar(255) DEFAULT NULL,
   `mat_contrayente_2` varchar(255) DEFAULT NULL,
+  `es_exterior` tinyint(1) DEFAULT 0 COMMENT '1=constancia del exterior (omite distrito/municipio/departamento)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `qr_token` (`qr_token`),
   UNIQUE KEY `unique_hash` (`unique_hash`),

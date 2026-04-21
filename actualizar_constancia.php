@@ -67,6 +67,7 @@ try {
     $anio    = $old_data['anio_n'];
     $mat_c1 = $old_data['mat_contrayente_1'];
     $mat_c2 = $old_data['mat_contrayente_2'];
+    $es_exterior = (int)($old_data['es_exterior'] ?? 0);
 
     // 3. Mapeo por tipo de trámite
     if ($tipo === 'NO_REGISTRO_NAC') {
@@ -79,6 +80,7 @@ try {
         $madre       = strtoupper($_POST['nac_nombre_madre'] ?? $madre);
         $madre_dui   = strtoupper($_POST['nac_nombre_madre_dui'] ?? $madre_dui);
         $padre       = strtoupper($_POST['nac_nombre_padre'] ?? $padre);
+        $es_exterior = (isset($_POST['es_exterior']) && $_POST['es_exterior'] === '1') ? 1 : 0;
     } 
     elseif ($tipo === 'NO_REGISTRO_DEF') {
         $nombre_nr = strtoupper($_POST['def_nombre_no_registro'] ?? $nombre_nr);
@@ -94,12 +96,14 @@ try {
         $def_depto = !empty($_POST['def_departamento_id']) ? $_POST['def_departamento_id'] : $def_depto;
         $def_muni  = !empty($_POST['def_municipio_id']) ? $_POST['def_municipio_id'] : $def_muni;
         $def_dist  = !empty($_POST['def_distrito_id']) ? $_POST['def_distrito_id'] : $def_dist;
+        $es_exterior = (isset($_POST['es_exterior']) && $_POST['es_exterior'] === '1') ? 1 : 0;
     }
     elseif ($tipo === 'NO_REGISTRO_MAT') {
         $mat_c1 = strtoupper(trim((string)($_POST['mat_nombre_no_registro'] ?? $mat_c1)));
         $mat_c2 = strtoupper(trim((string)($_POST['mat_nombre_contrayente_dos'] ?? $mat_c2)));
         $nombre_nr = $mat_c1; 
         $soporte   = $_POST['mat_tipo_soporte'] ?? $soporte;
+        $es_exterior = (isset($_POST['es_exterior']) && $_POST['es_exterior'] === '1') ? 1 : 0;
     }
     elseif (in_array($tipo, ['SOLTERIA', 'SOLTERIA_DIV'])) {
         $nombre_nr = strtoupper(trim((string)($_POST['sol_div_nombre_inscrito'] ?? $nombre_nr)));
@@ -162,7 +166,8 @@ try {
             nombre_padre = :padre,
             partida_n = :part, folio_n = :folio, libro_n = :libro, anio_n = :anio,
             mat_contrayente_1 = :m_c1, 
-            mat_contrayente_2 = :m_c2
+            mat_contrayente_2 = :m_c2,
+            es_exterior = :es_ext
             WHERE id = :id";
     
     $stmt = $pdo->prepare($sql);
@@ -193,6 +198,7 @@ try {
         ':anio'      => $anio,
         ':m_c1'      => $mat_c1,
         ':m_c2'      => $mat_c2,
+        ':es_ext'    => $es_exterior,
         ':id'        => $id
     ]);
 

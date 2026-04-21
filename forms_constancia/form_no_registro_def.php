@@ -43,33 +43,42 @@ require_once __DIR__ . '/../db_config.php';
         </div>
     </div>
 
-    <h6 class="mt-4 text-muted">Lugar de Fallecimiento</h6>
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label><small>Departamento</small></label>
-            <select class="form-control" name="def_departamento_id" id="def_departamento_id" required>
-                <option value="">Seleccione Departamento</option>
-                <?php
-                $stmt = $pdo->query("SELECT id, nombre FROM departamentos ORDER BY nombre");
-                while($d = $stmt->fetch(PDO::FETCH_ASSOC)){
-                    echo "<option value='{$d['id']}'>".htmlspecialchars($d['nombre'])."</option>";
-                }
-                ?>
-            </select>
-        </div>
+    <div class="custom-control custom-checkbox mb-3 mt-3">
+        <input type="checkbox" class="custom-control-input" id="def_es_exterior" name="es_exterior" value="1">
+        <label class="custom-control-label" for="def_es_exterior" style="cursor:pointer">
+            <strong>¿Es del Exterior?</strong> <small class="text-muted">(El documento omitirá Distrito, Municipio y Departamento)</small>
+        </label>
+    </div>
 
-        <div class="form-group col-md-4">
-            <label><small>Municipio</small></label>
-            <select class="form-control" name="def_municipio_id" id="def_municipio_id" disabled required>
-                <option value="">Seleccione Municipio</option>
-            </select>
-        </div>
+    <div id="def_ubicacion_section">
+        <h6 class="mt-4 text-muted">Lugar de Fallecimiento</h6>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label><small>Departamento</small></label>
+                <select class="form-control" name="def_departamento_id" id="def_departamento_id" required>
+                    <option value="">Seleccione Departamento</option>
+                    <?php
+                    $stmt = $pdo->query("SELECT id, nombre FROM departamentos ORDER BY nombre");
+                    while($d = $stmt->fetch(PDO::FETCH_ASSOC)){
+                        echo "<option value='{$d['id']}'>".htmlspecialchars($d['nombre'])."</option>";
+                    }
+                    ?>
+                </select>
+            </div>
 
-        <div class="form-group col-md-4">
-            <label><small>Distrito</small></label>
-            <select class="form-control" name="def_distrito_id" id="def_distrito_id" disabled required>
-                <option value="">Seleccione Distrito</option>
-            </select>
+            <div class="form-group col-md-4">
+                <label><small>Municipio</small></label>
+                <select class="form-control" name="def_municipio_id" id="def_municipio_id" disabled required>
+                    <option value="">Seleccione Municipio</option>
+                </select>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label><small>Distrito</small></label>
+                <select class="form-control" name="def_distrito_id" id="def_distrito_id" disabled required>
+                    <option value="">Seleccione Distrito</option>
+                </select>
+            </div>
         </div>
     </div>
 

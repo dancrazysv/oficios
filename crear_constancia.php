@@ -268,6 +268,30 @@ $(document).ready(function(){
         $('#def_distrito_nombre').val($("#def_distrito_id option:selected").text());
     });
 
+    $(document).on('change','#nac_es_exterior', function() {
+        var isExterior = this.checked;
+        var $section = $('#nac_ubicacion_section');
+        if (isExterior) {
+            $section.hide();
+            $('#nac_departamento_id').prop('required', false);
+        } else {
+            $section.show();
+            $('#nac_departamento_id').prop('required', true);
+        }
+    });
+
+    $(document).on('change','#def_es_exterior', function() {
+        var isExterior = this.checked;
+        var $section = $('#def_ubicacion_section');
+        if (isExterior) {
+            $section.hide();
+            $('#def_departamento_id').prop('required', false);
+        } else {
+            $section.show();
+            $('#def_departamento_id').prop('required', true);
+        }
+    });
+
     $(document).on('change','#def_check_madre', function() { $('#def_contenedor_madre').toggle(this.checked); });
     $(document).on('change','#def_check_padre', function() { $('#def_contenedor_padre').toggle(this.checked); });
     $(document).on('change','#nac_check_padre', function() { $('#nac_contenedor_padre').toggle(this.checked); });

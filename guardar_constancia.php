@@ -53,6 +53,7 @@ try {
     $partida = null; $folio = null; $libro = null; $anio = null;
     $def_nombre_segun_doc = null; $def_tipo_doc_segun_id = null;
     $mat_c1 = null; $mat_c2 = null; 
+    $es_exterior = (isset($_POST['es_exterior']) && $_POST['es_exterior'] === '1') ? 1 : 0;
     
     $distrito_id = null; 
     $def_depto_id = null; 
@@ -140,7 +141,7 @@ $ruta_almacenamiento = "archivos_finales/CERT_" . $tipo_constancia . "_" . $pers
         def_nombre_segun_doc, def_tipo_doc_segun_id,
         mat_contrayente_1, mat_contrayente_2,
         unique_hash, qr_token, creado_por_id, 
-        estado_validacion, ruta_pdf_final
+        estado_validacion, ruta_pdf_final, es_exterior
     ) VALUES (
         :num, :corr, NOW(), :tipo_c,
         :nom_s, :tipo_d, :num_d,
@@ -153,7 +154,7 @@ $ruta_almacenamiento = "archivos_finales/CERT_" . $tipo_constancia . "_" . $pers
         :def_nom_doc, :def_tipo_doc,
         :m_c1, :m_c2,
         :hash, :token, :user_id, 
-        'PENDIENTE', :ruta_pdf
+        'PENDIENTE', :ruta_pdf, :es_ext
     )";
 
     $stmt = $pdo->prepare($sql);
@@ -189,7 +190,8 @@ $ruta_almacenamiento = "archivos_finales/CERT_" . $tipo_constancia . "_" . $pers
         ':hash'          => bin2hex(random_bytes(16)),
         ':token'         => bin2hex(random_bytes(20)),
         ':user_id'       => $creado_por_id,
-        ':ruta_pdf'      => $ruta_almacenamiento
+        ':ruta_pdf'      => $ruta_almacenamiento,
+        ':es_ext'        => $es_exterior
     ]);
 
     $lastId = $pdo->lastInsertId();
