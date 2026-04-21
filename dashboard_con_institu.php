@@ -448,9 +448,16 @@ $es_ajeno = ((int)$doc['creado_por'] !== $user_id);
 <?php if ($pendiente): ?>
 <?php if ($puede_revisar): ?>
 <button class="btn btn-sm btn-primary btn-habilitar" data-id="<?php echo $id; ?>" data-type="<?php echo $tipo; ?>">Habilitar</button>
+<?php if ($es_oficio_inst): ?>
+<a href="preview_pdf.php?id=<?php echo $id; ?>&type=OFICIO_INST" target="_blank" class="btn btn-sm btn-outline-secondary">Revisar</a>
+<?php else: ?>
 <a href="view_pdf.php?type=<?php echo $tipo; ?>&id=<?php echo $id; ?>" target="_blank" class="btn btn-sm btn-outline-secondary">Revisar</a>
+<?php endif; ?>
 <?php elseif ($rol === 'normal'): ?>
 <a href="preview_pdf.php?id=<?php echo $id; ?>&type=<?php echo $tipo; ?>" target="_blank" class="btn btn-sm btn-preview">Vista Previa</a>
+<?php if ($es_oficio_inst): ?>
+<a href="editar_oficio_institucional.php?id=<?php echo $id; ?>" class="btn btn-sm btn-info">Editar</a>
+<?php endif; ?>
 <?php endif; ?>
 <?php endif; ?>
 <?php if ($aprobado): ?>
@@ -471,7 +478,7 @@ $es_ajeno = ((int)$doc['creado_por'] !== $user_id);
 <a href="editar_oficio.php?id=<?php echo $id; ?>" class="btn btn-sm btn-info">Editar</a>
 <?php elseif ($es_const): ?>
 <a href="editar_constancia.php?id=<?php echo $id; ?>" class="btn btn-sm btn-info">Editar</a>
-<?php elseif ($es_oficio_inst && $pendiente): ?>
+<?php elseif ($es_oficio_inst): ?>
 <a href="editar_oficio_institucional.php?id=<?php echo $id; ?>" class="btn btn-sm btn-info">Editar</a>
 <?php endif; ?>
 <?php endif; ?>

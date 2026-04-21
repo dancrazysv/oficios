@@ -1,7 +1,24 @@
 <?php
+declare(strict_types=1);
 session_start();
 require_once __DIR__ . '/db_config.php';
 header('Content-Type: application/json');
+
+/* Autenticación */
+$user_id  = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
+if ($user_id <= 0) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'msg' => 'Sesión expirada.']);
+    exit;
+}
+
+/* CSRF */
+if ($_SERVER['REQUEST_METHOD'] !== 'POST'
+    || !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'msg' => 'Error de seguridad: Token inválido']);
+    exit;
+}
 
 try {
     if (!$pdo->inTransaction()) $pdo->beginTransaction();
@@ -15,6 +32,15 @@ try {
     $old_data = $stmt_old->fetch(PDO::FETCH_ASSOC);
 
     if (!$old_data) throw new Exception("Registro no encontrado.");
+
+    /* Control de acceso: normal solo puede editar su propia constancia PENDIENTE */
+    $user_rol = (string)($_SESSION['user_rol'] ?? '');
+    if (!in_array($user_rol, ['administrador', 'supervisor'], true)) {
+        $creado_por = (int)($old_data['creado_por_id'] ?? 0);
+        if ($creado_por !== $user_id || ($old_data['estado_validacion'] ?? '') !== 'PENDIENTE') {
+            throw new Exception("Acceso denegado.");
+        }
+    }
 
     $tipo = $_POST['tipo_constancia_id'] ?? $old_data['tipo_constancia'];
     
@@ -41,6 +67,7 @@ try {
     $anio    = $old_data['anio_n'];
     $mat_c1 = $old_data['mat_contrayente_1'];
     $mat_c2 = $old_data['mat_contrayente_2'];
+    $es_exterior = (int)($old_data['es_exterior'] ?? 0);
 
     // 3. Mapeo por tipo de trámite
     if ($tipo === 'NO_REGISTRO_NAC') {
@@ -53,6 +80,7 @@ try {
         $madre       = strtoupper($_POST['nac_nombre_madre'] ?? $madre);
         $madre_dui   = strtoupper($_POST['nac_nombre_madre_dui'] ?? $madre_dui);
         $padre       = strtoupper($_POST['nac_nombre_padre'] ?? $padre);
+        $es_exterior = (isset($_POST['es_exterior']) && $_POST['es_exterior'] === '1') ? 1 : 0;
     } 
     elseif ($tipo === 'NO_REGISTRO_DEF') {
         $nombre_nr = strtoupper($_POST['def_nombre_no_registro'] ?? $nombre_nr);
@@ -68,12 +96,14 @@ try {
         $def_depto = !empty($_POST['def_departamento_id']) ? $_POST['def_departamento_id'] : $def_depto;
         $def_muni  = !empty($_POST['def_municipio_id']) ? $_POST['def_municipio_id'] : $def_muni;
         $def_dist  = !empty($_POST['def_distrito_id']) ? $_POST['def_distrito_id'] : $def_dist;
+        $es_exterior = (isset($_POST['es_exterior']) && $_POST['es_exterior'] === '1') ? 1 : 0;
     }
     elseif ($tipo === 'NO_REGISTRO_MAT') {
         $mat_c1 = strtoupper(trim((string)($_POST['mat_nombre_no_registro'] ?? $mat_c1)));
         $mat_c2 = strtoupper(trim((string)($_POST['mat_nombre_contrayente_dos'] ?? $mat_c2)));
         $nombre_nr = $mat_c1; 
         $soporte   = $_POST['mat_tipo_soporte'] ?? $soporte;
+        $es_exterior = (isset($_POST['es_exterior']) && $_POST['es_exterior'] === '1') ? 1 : 0;
     }
     elseif (in_array($tipo, ['SOLTERIA', 'SOLTERIA_DIV'])) {
         $nombre_nr = strtoupper(trim((string)($_POST['sol_div_nombre_inscrito'] ?? $nombre_nr)));
@@ -136,7 +166,8 @@ try {
             nombre_padre = :padre,
             partida_n = :part, folio_n = :folio, libro_n = :libro, anio_n = :anio,
             mat_contrayente_1 = :m_c1, 
-            mat_contrayente_2 = :m_c2
+            mat_contrayente_2 = :m_c2,
+            es_exterior = :es_ext
             WHERE id = :id";
     
     $stmt = $pdo->prepare($sql);
@@ -167,6 +198,7 @@ try {
         ':anio'      => $anio,
         ':m_c1'      => $mat_c1,
         ':m_c2'      => $mat_c2,
+        ':es_ext'    => $es_exterior,
         ':id'        => $id
     ]);
 

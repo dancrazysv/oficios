@@ -1,33 +1,48 @@
 <?php
 declare(strict_types=1);
-session_start();
 require_once __DIR__ . '/check_session.php';
 require_once __DIR__ . '/db_config.php';
 
 $rol = $_SESSION['user_rol'] ?? 'normal';
 $nombre_usuario = $_SESSION['nombre_usuario'] ?? 'Usuario';
-if (!in_array($rol, ['administrador', 'supervisor'])) { header("Location: dashboard.php"); exit; }
+if (!in_array($rol, ['administrador', 'supervisor'], true)) { header("Location: dashboard.php"); exit; }
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$csrf_token = $_SESSION['csrf_token'];
 
 $msg = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'];
-    $id = (int)($_POST['id'] ?? 0);
-    $nombre = strtoupper(trim($_POST['nombre_solicitante']));
-    $tipo_doc = (int)$_POST['tipo_documento_id'];
-    $num_doc = trim($_POST['numero_documento']);
+    if (!hash_equals($csrf_token, (string)($_POST['csrf_token'] ?? ''))) {
+        die("Error de validación de seguridad (CSRF).");
+    }
+
+    $action   = (string)($_POST['action'] ?? '');
+    $id       = (int)($_POST['id'] ?? 0);
+    $nombre   = strtoupper(trim((string)($_POST['nombre_solicitante'] ?? '')));
+    $tipo_doc = (int)($_POST['tipo_documento_id'] ?? 0);
+    $num_doc  = trim((string)($_POST['numero_documento'] ?? ''));
+
+    if (!in_array($action, ['nuevo', 'editar', 'eliminar'], true)) {
+        die("Acción no válida.");
+    }
 
     try {
         if ($action === 'nuevo') {
             $stmt = $pdo->prepare("INSERT INTO solicitantes (nombre_solicitante, tipo_documento_id, numero_documento) VALUES (?, ?, ?)");
             $stmt->execute([$nombre, $tipo_doc, $num_doc]);
-        } else if ($action === 'editar') {
+        } elseif ($action === 'editar') {
             $stmt = $pdo->prepare("UPDATE solicitantes SET nombre_solicitante = ?, tipo_documento_id = ?, numero_documento = ? WHERE id = ?");
             $stmt->execute([$nombre, $tipo_doc, $num_doc, $id]);
-        } else if ($action === 'eliminar') {
+        } elseif ($action === 'eliminar') {
             $pdo->prepare("DELETE FROM solicitantes WHERE id = ?")->execute([$id]);
         }
         $msg = "<div class='alert alert-success'>Operación exitosa</div>";
-    } catch (Exception $e) { $msg = "<div class='alert alert-danger'>Error: ".$e->getMessage()."</div>"; }
+    } catch (Exception $e) {
+        error_log('admin_catalogos error: ' . $e->getMessage());
+        $msg = "<div class='alert alert-danger'>Error al procesar la operación.</div>";
+    }
 }
 
 $pagina = (int)($_GET['p'] ?? 1); $offset = ($pagina - 1) * 15;
@@ -54,11 +69,11 @@ $total_paginas = (int)ceil($pdo->query("SELECT COUNT(*) FROM solicitantes")->fet
                     <tbody>
                         <?php foreach($items as $i): ?>
                         <tr>
-                            <td><?php echo $i['id']; ?></td>
-                            <td class="font-weight-bold"><?php echo $i['nombre_solicitante']; ?></td>
-                            <td><?php echo $i['numero_documento']; ?></td>
+                            <td><?php echo htmlspecialchars((string)$i['id'], ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td class="font-weight-bold"><?php echo htmlspecialchars((string)$i['nombre_solicitante'], ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo htmlspecialchars((string)$i['numero_documento'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td>
-                                <button class="btn btn-sm btn-info" onclick='abrirModal(<?php echo json_encode($i); ?>)'>Editar</button>
+                                <button class="btn btn-sm btn-info" onclick='abrirModal(<?php echo htmlspecialchars(json_encode($i), ENT_QUOTES, 'UTF-8'); ?>)'>Editar</button>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -72,6 +87,7 @@ $total_paginas = (int)ceil($pdo->query("SELECT COUNT(*) FROM solicitantes")->fet
         <div class="modal-dialog"><form method="POST" class="modal-content">
             <div class="modal-header"><h5>Ciudadano</h5></div>
             <div class="modal-body">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8'); ?>">
                 <input type="hidden" name="action" id="action"><input type="hidden" name="id" id="id">
                 <div class="form-group"><label>Nombre Completo</label><input type="text" name="nombre_solicitante" id="nombre" class="form-control text-uppercase" required></div>
                 <div class="form-group"><label>Tipo Doc (1:DUI, 2:PAS)</label><input type="number" name="tipo_documento_id" id="tipo" class="form-control" required></div>

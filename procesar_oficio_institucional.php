@@ -292,7 +292,11 @@ try {
 
     $pdo->commit();
 
-    header("Location: ver_oficio_institucional.php?id=" . $id_oficio . "&msg=creado");
+    if ($rol === 'normal') {
+        header("Location: dashboard.php");
+    } else {
+        header("Location: ver_oficio_institucional.php?id=" . $id_oficio . "&msg=creado");
+    }
     exit;
 
 } catch (Throwable $e) {

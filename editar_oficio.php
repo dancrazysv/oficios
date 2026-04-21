@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 // 1. Limpieza estricta de salida para evitar "Error: undefined"
 ob_start();
 
-include 'check_session.php';
-include 'db_config.php';
+require_once __DIR__ . '/check_session.php';
+require_once __DIR__ . '/db_config.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -19,7 +20,7 @@ if ($user_id <= 0) {
 // Configuración de tiempo
 date_default_timezone_set('America/El_Salvador');
 
-require 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Endroid\QrCode\Builder\Builder;
@@ -64,12 +65,26 @@ function fechaEspañol($fecha) {
 }
 
 // === CARGA DE DATOS DEL OFICIO (GET) ===
-$oficio_id = $_GET['id'] ?? null;
-if (!$oficio_id) die("ID de oficio no proporcionado.");
+$oficio_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if (!$oficio_id) {
+    ob_clean();
+    die(json_encode(['success' => false, 'message' => 'ID de oficio no proporcionado o inválido.']));
+}
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$csrf_token = (string)$_SESSION['csrf_token'];
 
 // === PROCESAR GUARDADO (POST) ===
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_cambios'])) {
     try {
+        // Verificar CSRF
+        if (!hash_equals($csrf_token, (string)($_POST['csrf_token'] ?? ''))) {
+            ob_clean();
+            echo json_encode(['success' => false, 'message' => 'Error de validación de seguridad (CSRF).']);
+            exit;
+        }
         // Limpiar cualquier salida accidental
         if (ob_get_length()) ob_clean();
         header('Content-Type: application/json; charset=utf-8');
@@ -221,7 +236,8 @@ try {
     <h2 class="text-center mb-4 section-title">Editar Oficio: <?php echo htmlspecialchars($oficio['referencia']); ?></h2>
 
     <form id="editForm" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?php echo $oficio_id; ?>">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8'); ?>">
+        <input type="hidden" name="id" value="<?php echo (int)$oficio_id; ?>">
         <input type="hidden" name="guardar_cambios" value="1">
 
         <div class="form-row">
@@ -334,7 +350,7 @@ $(document).ready(function () {
     // Carga de distritos inscripción
     fetch('get_distritos_inscripcion.php').then(r => r.json()).then(data => {
         const select = $('#distrito_inscripcion');
-        const current = '<?php echo $oficio["distrito_inscripcion"]; ?>';
+        const current = <?php echo json_encode($oficio['distrito_inscripcion'] ?? ''); ?>;
         data.forEach(item => select.append($('<option>', { value: item, text: item, selected: (item == current) })));
     });
 

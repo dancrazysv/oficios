@@ -41,31 +41,40 @@ require_once __DIR__ . '/../db_config.php';
         </div>
     </div>
 
-    <h6 class="mt-4 text-muted">Ubicación de Nacimiento</h6>
-    <div class="form-row">
-        <div class="col-md-4">
-            <label><small>Departamento</small></label>
-            <select class="form-control" id="nac_departamento_id" name="nac_departamento_id" required>
-                <option value="">Seleccione</option>
-                <?php
-                $stmt = $pdo->query("SELECT id, nombre FROM departamentos ORDER BY nombre");
-                while($d = $stmt->fetch(PDO::FETCH_ASSOC)){
-                    echo "<option value='{$d['id']}'>".htmlspecialchars($d['nombre'])."</option>";
-                }
-                ?>
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label><small>Municipio</small></label>
-            <select class="form-control" id="nac_municipio_id" name="nac_municipio_id" disabled required>
-                <option value="">Seleccione</option>
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label><small>Distrito</small></label>
-            <select class="form-control" id="nac_distrito_nacimiento_id" name="nac_distrito_nacimiento_id" disabled required>
-                <option value="">Seleccione</option>
-            </select>
+    <div class="custom-control custom-checkbox mb-3 mt-3">
+        <input type="checkbox" class="custom-control-input" id="nac_es_exterior" name="es_exterior" value="1">
+        <label class="custom-control-label" for="nac_es_exterior" style="cursor:pointer">
+            <strong>¿Es del Exterior?</strong> <small class="text-muted">(El documento omitirá Distrito, Municipio y Departamento)</small>
+        </label>
+    </div>
+
+    <div id="nac_ubicacion_section">
+        <h6 class="mt-4 text-muted">Ubicación de Nacimiento</h6>
+        <div class="form-row">
+            <div class="col-md-4">
+                <label><small>Departamento</small></label>
+                <select class="form-control" id="nac_departamento_id" name="nac_departamento_id" required>
+                    <option value="">Seleccione</option>
+                    <?php
+                    $stmt = $pdo->query("SELECT id, nombre FROM departamentos ORDER BY nombre");
+                    while($d = $stmt->fetch(PDO::FETCH_ASSOC)){
+                        echo "<option value='{$d['id']}'>".htmlspecialchars($d['nombre'])."</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label><small>Municipio</small></label>
+                <select class="form-control" id="nac_municipio_id" name="nac_municipio_id" disabled required>
+                    <option value="">Seleccione</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label><small>Distrito</small></label>
+                <select class="form-control" id="nac_distrito_nacimiento_id" name="nac_distrito_nacimiento_id" disabled required>
+                    <option value="">Seleccione</option>
+                </select>
+            </div>
         </div>
     </div>
 

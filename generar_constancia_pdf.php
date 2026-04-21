@@ -74,6 +74,8 @@ if ($tipo_constancia === 'NO_REGISTRO_NAC') {
     $descripcion_tramite = "Certificación de no Registro de Asiento de Nacimiento";
     $persona_certificada = mb_strtoupper(trim($_POST['nac_nombre_no_registro'] ?? ''), 'UTF-8');
     
+    $es_exterior = (($_POST['es_exterior'] ?? '0') === '1');
+
     // Variables de ubicación
     $municipio = trim((string)($_POST['nac_municipio_nombre'] ?? 'San Salvador Centro'));
     $distrito  = trim((string)($_POST['nac_distrito_nombre']  ?? 'San Salvador'));
@@ -106,11 +108,18 @@ if ($tipo_constancia === 'NO_REGISTRO_NAC') {
         ? date('d/m/Y', strtotime($_POST['nac_fecha_nacimiento'])) 
         : '';
 
+    // Lugar de nacimiento: exterior u ordinario
+    if ($es_exterior) {
+        $txt_lugar = "nació en <strong>Territorio Extranjero</strong>";
+    } else {
+        $txt_lugar = "nació en el Distrito de <strong>$distrito</strong>, Municipio de <strong>$municipio</strong>, Departamento de <strong>$depto</strong>";
+    }
+
     // CONSTRUCCIÓN DEL PÁRRAFO FINAL
     $parrafo_principal = "<p class='content indent'>
         Habiéndose efectuado la búsqueda hasta el día <strong>$fecha_legal</strong>, en los registros de nuestra base de datos que corresponde únicamente al Distrito San Salvador, 
         <strong>NO aparece registrada ningún asiento de NACIMIENTO</strong> a nombre de: <strong>$persona_certificada</strong>, según $soporte_final, 
-        nació en el Distrito de <strong>$distrito</strong>, Municipio de <strong>$municipio</strong>, Departamento de <strong>$depto</strong>{$txt_hora} 
+        {$txt_lugar}{$txt_hora} 
         el día <strong>$f_nac</strong>, {$txt_filiacion}.
     </p>";
 }
@@ -119,6 +128,8 @@ elseif ($tipo_constancia === 'NO_REGISTRO_DEF') {
     $titulo_constancia = "CERTIFICACIÓN DE NO REGISTRO DE ASIENTO DE DEFUNCIÓN";
     $descripcion_tramite = "Certificación de no Registro de Asiento de Defunción";
     
+    $es_exterior = (($_POST['es_exterior'] ?? '0') === '1');
+
     $persona_certificada = mb_strtoupper(trim($_POST['def_nombre_no_registro'] ?? ''), 'UTF-8');
     $nombre_segun_doc = mb_strtoupper(trim($_POST['def_nombre_segun_doc'] ?? ''), 'UTF-8');
     $tipo_doc_segun_id = $_POST['def_tipo_doc_segun_id'] ?? '';
@@ -158,8 +169,15 @@ elseif ($tipo_constancia === 'NO_REGISTRO_DEF') {
     $distrito  = trim((string)($_POST['def_distrito_nombre']  ?? 'San Salvador'));
     $depto     = trim((string)($_POST['def_departamento_nombre'] ?? 'San Salvador'));
 
+    // Lugar de fallecimiento: exterior u ordinario
+    if ($es_exterior) {
+        $txt_lugar_def = "falleció en <strong>Territorio Extranjero</strong>";
+    } else {
+        $txt_lugar_def = "falleció en Distrito de $distrito, Municipio de $municipio, Departamento de $depto,";
+    }
+
     // Se quitó la coma manual antes de {$txt_filiacion} porque ahora el texto corregido ya la incluye si es necesario
-    $parrafo_principal = "<p class='content indent'>Habiéndose efectuado la respectiva búsqueda en los registros de nuestra base de datos, que corresponde únicamente al Distrito San Salvador, hasta el día <strong>$fecha_legal</strong>, <strong>NO aparece registrada ningún ASIENTO DE DEFUNCIÓN</strong> a nombre de: <strong>$persona_certificada</strong>, según $soporte_final{$txt_nombre_extra}, falleció en Distrito de $distrito, Municipio de $municipio, Departamento de $depto,{$txt_hora} el día <strong>$f_def</strong>{$txt_filiacion}.</p>";
+    $parrafo_principal = "<p class='content indent'>Habiéndose efectuado la respectiva búsqueda en los registros de nuestra base de datos, que corresponde únicamente al Distrito San Salvador, hasta el día <strong>$fecha_legal</strong>, <strong>NO aparece registrada ningún ASIENTO DE DEFUNCIÓN</strong> a nombre de: <strong>$persona_certificada</strong>, según $soporte_final{$txt_nombre_extra}, {$txt_lugar_def}{$txt_hora} el día <strong>$f_def</strong>{$txt_filiacion}.</p>";
 }
 
 /* ================= 3. SOLTERÍA / ESTADO FAMILIAR (CORREGIDO) ================= */
@@ -204,6 +222,7 @@ elseif ($tipo_constancia === 'NO_REGISTRO_CED') {
 elseif ($tipo_constancia === 'NO_REGISTRO_MAT') {
     $titulo_constancia = "CERTIFICACIÓN DE NO REGISTRO DE ASIENTO DE MATRIMONIO";
     $descripcion_tramite = "Certificación de no Registro de Asiento de Matrimonio";
+    $es_exterior = (($_POST['es_exterior'] ?? '0') === '1');
     
     // Contrayente 1 (Principal)
     $persona_certificada = mb_strtoupper(trim($_POST['mat_nombre_no_registro'] ?? ''), 'UTF-8');
@@ -226,8 +245,12 @@ elseif ($tipo_constancia === 'NO_REGISTRO_MAT') {
     }
 
     // Párrafo con la redacción ajustada
+    $texto_ambito_mat = $es_exterior
+        ? "Habiéndose efectuado la respectiva búsqueda en los registros de nuestra base de datos, hasta el día <strong>$fecha_legal</strong>."
+        : "Habiéndose efectuado la respectiva búsqueda en los registros de nuestra base de datos que corresponde únicamente al Distrito de San Salvador, hasta el día <strong>$fecha_legal</strong>.";
+
     $parrafo_principal = "<p class='content indent'>
-        Habiéndose efectuado la respectiva búsqueda en los registros de nuestra base de datos que corresponde únicamente al Distrito de San Salvador, hasta el día <strong>$fecha_legal</strong>. <strong>NO aparece registrada ningún Asiento de MATRIMONIO</strong> a nombre de: $texto_nombres.
+        {$texto_ambito_mat} <strong>NO aparece registrada ningún Asiento de MATRIMONIO</strong> a nombre de: $texto_nombres.
     </p>";
 }
 

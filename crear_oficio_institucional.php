@@ -193,15 +193,15 @@ function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
                         <div class="form-row mb-3">
                             <div class="form-group col-md-3">
                                 <label class="small font-weight-bold">N° Oficio Entrada:</label>
-                                <input type="text" name="num_oficio_in[]" class="form-control form-control-sm oficio-num" required>
+                                <input type="text" class="form-control form-control-sm oficio-num" required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="small font-weight-bold">Referencia:</label>
-                                <input type="text" name="ref_expediente_in[]" class="form-control form-control-sm oficio-ref">
+                                <input type="text" class="form-control form-control-sm oficio-ref">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="small font-weight-bold">Fecha Documento:</label>
-                                <input type="date" name="fecha_doc_in[]" class="form-control form-control-sm oficio-fecha" required>
+                                <input type="date" class="form-control form-control-sm oficio-fecha" required>
                             </div>
                             <div class="form-group col-md-3 d-flex align-items-end">
                                 <button type="button" class="btn btn-sm btn-outline-primary btn-add-peticion" data-oficio-index="0">+ Agregar Petición</button>
@@ -209,8 +209,11 @@ function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
                         </div>
 
                         <div class="peticiones-container" data-oficio-index="0">
-                            <div class="peticion-item">
+                            <div class="peticion-item" data-peticion-id="1">
                                 <div class="peticion-header">Petición #1</div>
+                                <input type="hidden" name="num_oficio_in[]" class="hid-oficio-num">
+                                <input type="hidden" name="ref_expediente_in[]" class="hid-oficio-ref">
+                                <input type="hidden" name="fecha_doc_in[]" class="hid-oficio-fecha">
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label class="small font-weight-bold text-danger">Partida Solicitada:</label>
@@ -357,6 +360,9 @@ function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
 <template id="template_peticion">
     <div class="peticion-item">
         <div class="peticion-header">Petición #<span class="peticion-num">2</span></div>
+        <input type="hidden" name="num_oficio_in[]" class="hid-oficio-num">
+        <input type="hidden" name="ref_expediente_in[]" class="hid-oficio-ref">
+        <input type="hidden" name="fecha_doc_in[]" class="hid-oficio-fecha">
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label class="small font-weight-bold text-danger">Partida Solicitada:</label>
@@ -389,15 +395,15 @@ function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
         <div class="form-row mb-3">
             <div class="form-group col-md-3">
                 <label class="small font-weight-bold">N° Oficio Entrada:</label>
-                <input type="text" name="num_oficio_in[]" class="form-control form-control-sm oficio-num" required>
+                <input type="text" class="form-control form-control-sm oficio-num" required>
             </div>
             <div class="form-group col-md-3">
                 <label class="small font-weight-bold">Referencia:</label>
-                <input type="text" name="ref_expediente_in[]" class="form-control form-control-sm oficio-ref">
+                <input type="text" class="form-control form-control-sm oficio-ref">
             </div>
             <div class="form-group col-md-3">
                 <label class="small font-weight-bold">Fecha Documento:</label>
-                <input type="date" name="fecha_doc_in[]" class="form-control form-control-sm oficio-fecha" required>
+                <input type="date" class="form-control form-control-sm oficio-fecha" required>
             </div>
             <div class="form-group col-md-3 d-flex align-items-end">
                 <button type="button" class="btn btn-sm btn-outline-primary btn-add-peticion" data-oficio-index="1">+ Agregar Petición</button>
@@ -406,6 +412,9 @@ function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
         <div class="peticiones-container" data-oficio-index="1">
             <div class="peticion-item">
                 <div class="peticion-header">Petición #1</div>
+                <input type="hidden" name="num_oficio_in[]" class="hid-oficio-num">
+                <input type="hidden" name="ref_expediente_in[]" class="hid-oficio-ref">
+                <input type="hidden" name="fecha_doc_in[]" class="hid-oficio-fecha">
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label class="small font-weight-bold text-danger">Partida Solicitada:</label>
@@ -520,37 +529,76 @@ $(document).ready(function() {
     });
 
     let oficioCounter = 1;
+    let peticionIdCounter = 1;
+
+    /* Crea una fila en Sección II; si se pasa peticionId la enlaza a la petición de Sección I */
+    function addPersonaRow(peticionId, tipo, nombre) {
+        const $wrapper = $('<div>').append(document.getElementById('template_persona').content.cloneNode(true));
+        const $row = $wrapper.find('.persona-row');
+        if (peticionId) $row.attr('data-peticion-id', peticionId);
+        if (tipo) {
+            $row.find('.sel-tipo-tramite').val(tipo);
+            const isFamily = (tipo === 'MATRIMONIO' || tipo === 'DIVORCIO');
+            $row.find('.lbl-filiacion-1').text(isFamily ? 'Nombre del Cónyuge 1:' : 'Nombre de la Madre:');
+            $row.find('.lbl-filiacion-2').text(isFamily ? 'Nombre del Cónyuge 2:' : 'Nombre del Padre:');
+        }
+        if (nombre) $row.find('input[name="nombre_consultado[]"]').val(nombre.toUpperCase());
+        $('#contenedor_personas').append($row);
+    }
+
+    /* Fila inicial de Sección II enlazada a la petición #1 */
+    addPersonaRow(1, 'NACIMIENTO', '');
+    $('#btn_add_persona').click(function() { addPersonaRow(null, null, null); });
 
     $('#btn_add_oficio').click(function() {
         oficioCounter++;
-        const template = $('#template_oficio').html();
-        const nuevoOficio = $(template);
-        nuevoOficio.find('[data-oficio-index]').attr('data-oficio-index', oficioCounter);
-        nuevoOficio.find('.btn-add-peticion').attr('data-oficio-index', oficioCounter);
-        nuevoOficio.find('.oficio-num-display').text(oficioCounter);
-        $('#contenedor_oficios_entrada').append(nuevoOficio);
+        peticionIdCounter++;
+        const currentId = peticionIdCounter;
+        const $wrapperOficio = $('<div>').append(document.getElementById('template_oficio').content.cloneNode(true));
+        const $nuevoOficio = $wrapperOficio.find('.oficio-entrada-row');
+        $nuevoOficio.find('[data-oficio-index]').attr('data-oficio-index', oficioCounter);
+        $nuevoOficio.find('.btn-add-peticion').attr('data-oficio-index', oficioCounter);
+        $nuevoOficio.find('.oficio-num-display').text(oficioCounter);
+        $nuevoOficio.find('.peticion-item').attr('data-peticion-id', currentId);
+        $('#contenedor_oficios_entrada').append($nuevoOficio);
+        addPersonaRow(currentId, 'NACIMIENTO', '');
     });
 
     $(document).on('click', '.btn-remove-oficio', function() {
         if(confirm('¿Eliminar este oficio de entrada y todas sus peticiones?')) {
-            $(this).closest('.oficio-entrada-row').remove();
+            const $oficio = $(this).closest('.oficio-entrada-row');
+            $oficio.find('.peticion-item[data-peticion-id]').each(function() {
+                const pid = $(this).attr('data-peticion-id');
+                $('#contenedor_personas .persona-row[data-peticion-id="' + pid + '"]').remove();
+            });
+            $oficio.remove();
         }
     });
 
     $(document).on('click', '.btn-add-peticion', function() {
+        peticionIdCounter++;
+        const currentId = peticionIdCounter;
         const oficioBloque = $(this).closest('.oficio-entrada-row');
         const container = oficioBloque.find('.peticiones-container');
         const peticionCount = container.find('.peticion-item').length + 1;
-        const template = $('#template_peticion').html();
-        const nuevaPeticion = $(template);
-        nuevaPeticion.find('.peticion-num').text(peticionCount);
-        container.append(nuevaPeticion);
+        const $wrapperPeticion = $('<div>').append(document.getElementById('template_peticion').content.cloneNode(true));
+        const $nuevaPeticion = $wrapperPeticion.find('.peticion-item');
+        $nuevaPeticion.find('.peticion-num').text(peticionCount);
+        $nuevaPeticion.attr('data-peticion-id', currentId);
+        container.append($nuevaPeticion);
+        syncOficioHiddens(oficioBloque);
+        addPersonaRow(currentId, 'NACIMIENTO', '');
     });
 
     $(document).on('click', '.btn-remove-peticion', function() {
         const container = $(this).closest('.peticiones-container');
         if(container.find('.peticion-item').length > 1) {
-            $(this).closest('.peticion-item').remove();
+            const $peticion = $(this).closest('.peticion-item');
+            const peticionId = $peticion.attr('data-peticion-id');
+            $peticion.remove();
+            if (peticionId) {
+                $('#contenedor_personas .persona-row[data-peticion-id="' + peticionId + '"]').remove();
+            }
             container.find('.peticion-item').each(function(index) {
                 $(this).find('.peticion-num').text(index + 1);
             });
@@ -559,11 +607,23 @@ $(document).ready(function() {
         }
     });
 
-    function addPersonaRow() {
-        $('#contenedor_personas').append(document.getElementById('template_persona').content.cloneNode(true));
-    }
-    addPersonaRow();
-    $('#btn_add_persona').click(addPersonaRow);
+    /* Sincronizar tipo de partida → tipo de trámite en Sección II */
+    $(document).on('change', 'select[name="tipo_partida_solicitada[]"]', function() {
+        const peticionId = $(this).closest('.peticion-item').attr('data-peticion-id');
+        if (!peticionId) return;
+        const tipo = $(this).val();
+        const $row = $('#contenedor_personas .persona-row[data-peticion-id="' + peticionId + '"]');
+        if ($row.length) $row.find('.sel-tipo-tramite').val(tipo).trigger('change');
+    });
+
+    /* Sincronizar nombre del oficio → nombre en Sección II */
+    $(document).on('input', 'input[name="nombre_segun_oficio[]"]', function() {
+        const peticionId = $(this).closest('.peticion-item').attr('data-peticion-id');
+        if (!peticionId) return;
+        const nombre = $(this).val();
+        const $row = $('#contenedor_personas .persona-row[data-peticion-id="' + peticionId + '"]');
+        if ($row.length) $row.find('input[name="nombre_consultado[]"]').val(nombre.toUpperCase());
+    });
 
     $(document).on('click', '.btn-remove', function() {
         if($('.persona-row').length > 1) $(this).closest('.persona-row').remove();
@@ -594,7 +654,28 @@ $(document).ready(function() {
         }
     });
 
+    /* ── Sync oficio-level visible inputs → hidden inputs per petición ── */
+    function syncOficioHiddens($bloque) {
+        const num  = $bloque.find('> .card-body > .form-row .oficio-num, .oficio-num').first().val() || $bloque.find('.oficio-num').val() || '';
+        const ref  = $bloque.find('.oficio-ref').val() || '';
+        const fec  = $bloque.find('.oficio-fecha').val() || '';
+        $bloque.find('.peticiones-container .peticion-item').each(function() {
+            $(this).find('.hid-oficio-num').val(num);
+            $(this).find('.hid-oficio-ref').val(ref);
+            $(this).find('.hid-oficio-fecha').val(fec);
+        });
+    }
+
+    /* Sync on every keystroke / change on the visible oficio inputs */
+    $(document).on('input change', '.oficio-num, .oficio-ref, .oficio-fecha', function() {
+        syncOficioHiddens($(this).closest('.oficio-entrada-row'));
+    });
+
+    /* Final sync before submit */
     $('#formOficioInst').on('submit', function() {
+        $('#contenedor_oficios_entrada .oficio-entrada-row').each(function() {
+            syncOficioHiddens($(this));
+        });
         $('#btnSubmit').prop('disabled', true).html('Procesando...');
     });
 });

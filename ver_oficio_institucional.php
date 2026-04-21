@@ -27,24 +27,27 @@ function fechaFormateada(?string $fecha): string {
 }
 
 function tipoPartidaTexto(string $tipo): string {
-    return match (strtoupper(trim($tipo))) {
+    $map = [
         'NACIMIENTO' => 'NACIMIENTO',
-        'DEFUNCION' => 'DEFUNCIÓN',
+        'DEFUNCION'  => 'DEFUNCIÓN',
         'MATRIMONIO' => 'MATRIMONIO',
-        'DIVORCIO' => 'DIVORCIO',
-        'CEDULA' => 'CÉDULA',
-        'CARNET' => 'CARNET MINORIDAD',
-        default => $tipo,
-    };
+        'DIVORCIO'   => 'DIVORCIO',
+        'CEDULA'     => 'CÉDULA',
+        'CARNET'     => 'CARNET MINORIDAD',
+    ];
+    $key = strtoupper(trim($tipo));
+    return $map[$key] ?? $tipo;
 }
 
 try {
     $stmt = $pdo->prepare("
         SELECT oi.*, i.nombre_institucion, i.unidad_dependencia, i.ubicacion_sede, i.email_contacto,
-               u.nombre_completo AS creado_por_nombre, u.area AS creado_por_area
+               u.nombre_completo AS creado_por_nombre, u.area AS creado_por_area,
+               ua.nombre_completo AS aprobado_por_nombre
         FROM oficios_institucionales oi
         INNER JOIN instituciones i ON oi.id_institucion = i.id
         LEFT JOIN usuarios u ON oi.creado_por = u.id
+        LEFT JOIN usuarios ua ON oi.aprobado_por = ua.id
         WHERE oi.id = ?
         LIMIT 1
     ");
@@ -109,7 +112,7 @@ try {
 <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 <style>
 body{background:#f8f9fa}
-.container{margin-top:30px}
+.container{margin-top:10px}
 .info-label{font-size:0.8rem; color:#6c757d; margin-bottom:2px; text-transform:uppercase;}
 .info-value{font-weight:600; font-size:1rem;}
 .table thead th{background-color:#343a40; color:#fff; font-size:0.85rem;}
@@ -120,6 +123,46 @@ body{background:#f8f9fa}
 </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow mb-4">
+<a class="navbar-brand font-weight-bold" href="dashboard.php">Sistema de Trámites</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="navbarNav">
+<ul class="navbar-nav mr-auto">
+<li class="nav-item"><a class="nav-link" href="crear_oficio.php">Crear Oficio</a></li>
+<li class="nav-item"><a class="nav-link" href="crear_constancia.php">Crear Certificación</a></li>
+<li class="nav-item"><a class="nav-link" href="crear_oficio_institucional.php">Crear Oficio Inst.</a></li>
+<li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+<?php if ($rol === 'administrador'): ?>
+<li class="nav-item dropdown">
+<a class="nav-link dropdown-toggle" href="#" id="navCatalogos" role="button" data-toggle="dropdown">Administración</a>
+<div class="dropdown-menu shadow">
+<a class="dropdown-item" href="catalogos/admin_departamentos.php">Departamentos</a>
+<a class="dropdown-item" href="catalogos/admin_municipios.php">Municipios</a>
+<a class="dropdown-item" href="catalogos/admin_distritos.php">Distritos</a>
+<a class="dropdown-item" href="catalogos/admin_instituciones.php">Instituciones</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="catalogos/admin_tipos_documento.php">Tipos de Documento</a>
+<a class="dropdown-item" href="catalogos/admin_tipos_constancia.php">Tipos de Constancia</a>
+<a class="dropdown-item" href="catalogos/admin_soportes.php">Soportes</a>
+<a class="dropdown-item" href="catalogos/admin_hospitales.php">Hospitales</a>
+<a class="dropdown-item" href="catalogos/admin_oficiantes.php">Oficiantes</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="catalogos/admin_usuarios.php">Usuarios</a>
+<a class="dropdown-item" href="catalogos/admin_solicitantes.php">Solicitantes</a>
+</div>
+</li>
+<?php endif; ?>
+<?php if (in_array($rol, ['administrador', 'supervisor'], true)): ?>
+<li class="nav-item"><a class="nav-link" href="panel_envios.php">Panel Envíos</a></li>
+<?php endif; ?>
+<?php if (in_array($rol, ['normal', 'supervisor'], true)): ?>
+<li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#modalPassword">Mi Cuenta</a></li>
+<?php endif; ?>
+</ul>
+<span class="navbar-text mr-3 text-white">Bienvenido, <strong><?php echo e($nombre_usuario); ?></strong></span>
+<a href="logout.php" class="btn btn-outline-light btn-sm">Cerrar Sesión</a>
+</div>
+</nav>
 <div class="container mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -158,6 +201,18 @@ body{background:#f8f9fa}
                 <div class="col-12">
                     <div class="info-label">Correo Institucional</div>
                     <div class="info-value"><a href="mailto:<?php echo e($oficio['email_envio']); ?>"><?php echo e($oficio['email_envio']); ?></a></div>
+                </div>
+            </div>
+            <?php endif; ?>
+            <?php if ($oficio['estado_validacion'] === 'APROBADO' && !empty($oficio['aprobado_por_nombre'])): ?>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class="info-label">Aprobado Por</div>
+                    <div class="info-value"><?php echo e($oficio['aprobado_por_nombre']); ?></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-label">Fecha de Aprobación</div>
+                    <div class="info-value"><?php echo fechaFormateada($oficio['fecha_aprobacion'] ?? null); ?></div>
                 </div>
             </div>
             <?php endif; ?>
@@ -263,5 +318,7 @@ body{background:#f8f9fa}
     </div>
     <?php endif; ?>
 </div>
+<script src="bootstrap/js/jquery-3.7.1.min.js"></script>
+<script src="bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

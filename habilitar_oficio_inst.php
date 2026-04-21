@@ -155,12 +155,14 @@ try {
         exit;
     }
 
+    $aprobado_por = (int)($_SESSION['user_id'] ?? 0);
     $stmt_upd = $pdo->prepare("
         UPDATE oficios_institucionales
-        SET ruta_pdf_final = ?, estado_validacion = 'APROBADO'
+        SET ruta_pdf_final = ?, estado_validacion = 'APROBADO',
+            fecha_aprobacion = NOW(), aprobado_por = ?
         WHERE id = ?
     ");
-    $stmt_upd->execute(['archivos_finales_inst/' . basename($pdfFinalPath), $id]);
+    $stmt_upd->execute(['archivos_finales_inst/' . basename($pdfFinalPath), $aprobado_por, $id]);
 
     if (is_file($pdfBasePath)) {
         unlink($pdfBasePath);

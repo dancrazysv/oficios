@@ -1,6 +1,7 @@
 <?php
-include 'check_session.php';
-include 'db_config.php';
+declare(strict_types=1);
+require_once __DIR__ . '/check_session.php';
+require_once __DIR__ . '/db_config.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -23,6 +24,11 @@ try {
 }
 
 date_default_timezone_set('America/El_Salvador');
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$csrf_token = (string)$_SESSION['csrf_token'];
 
 // Generar referencia correlativa automática
 $anio_actual = date('Y');
@@ -84,6 +90,7 @@ $departamentos = $stmt_depto->fetchAll();
     <h2 class="text-center mb-4 section-title">Crear Nuevo Oficio</h2>
 
     <form id="oficioForm" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8'); ?>">
         <input type="hidden" name="creado_por" value="<?php echo $creado_por; ?>">
         
         <div class="form-row">

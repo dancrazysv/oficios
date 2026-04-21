@@ -212,9 +212,35 @@ $(document).ready(function(){
         });
     });
 
+    function isTerritorioExtranjero($select) {
+        return $.trim($select.find('option:selected').text()).toLowerCase() === 'territorio extranjero';
+    }
+
+    function applyTerritorioRule(prefix) {
+        const $dep  = $('#' + prefix + '_departamento_id');
+        const $muni = $('#' + prefix + '_municipio_id');
+        const $dist = prefix === 'nac' ? $('#nac_distrito_nacimiento_id') : $('#def_distrito_id');
+        const $muniNombre = $('#' + prefix + '_municipio_nombre');
+        const $distNombre = $('#' + prefix + '_distrito_nombre');
+        const territorio = isTerritorioExtranjero($dep);
+
+        if (territorio) {
+            $muni.val('').html('<option value="">Seleccione Municipio</option>').prop('disabled', true).prop('required', false);
+            $dist.val('').html('<option value="">Seleccione Distrito</option>').prop('disabled', true).prop('required', false);
+            $muniNombre.val('');
+            $distNombre.val('');
+            return true;
+        }
+
+        $muni.prop('disabled', false).prop('required', true);
+        $dist.prop('required', true);
+        return false;
+    }
+
     $(document).on('change','#nac_departamento_id',function(){
         let depId = $(this).val();
         $('#nac_departamento_nombre').val($("#nac_departamento_id option:selected").text());
+        if (applyTerritorioRule('nac')) return;
         $.post('get_data_constancia.php',{ action:'get_municipios', depto_id:depId, csrf_token:csrf },function(r){
             if(r.success){
                 let h='<option value="">Seleccione Municipio</option>';
@@ -243,6 +269,7 @@ $(document).ready(function(){
     $(document).on('change', '#def_departamento_id', function() {
         const deptoId = $(this).val();
         $('#def_departamento_nombre').val($("#def_departamento_id option:selected").text());
+        if (applyTerritorioRule('def')) return;
         $.post('get_data_constancia.php', { action: 'get_municipios', depto_id: deptoId, csrf_token: csrf }, function(r) {
             if (r.success) {
                 let options = '<option value="">Seleccione Municipio</option>';
@@ -266,6 +293,14 @@ $(document).ready(function(){
 
     $(document).on('change', '#def_distrito_id', function() {
         $('#def_distrito_nombre').val($("#def_distrito_id option:selected").text());
+    });
+
+    $(document).on('change','#nac_es_exterior', function() {
+        applyTerritorioRule('nac');
+    });
+
+    $(document).on('change','#def_es_exterior', function() {
+        applyTerritorioRule('def');
     });
 
     $(document).on('change','#def_check_madre', function() { $('#def_contenedor_madre').toggle(this.checked); });
