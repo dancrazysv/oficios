@@ -206,12 +206,12 @@ function e(mixed $t): string { return htmlspecialchars((string)$t, ENT_QUOTES, '
                     </label>
                 </div>
 
-                <div id="nac_ubicacion_section" <?php echo (!empty($c['es_exterior'])) ? 'style="display:none"' : ''; ?>>
+                <div id="nac_ubicacion_section">
                     <h6 class="mt-3 text-muted">Ubicación de Nacimiento</h6>
                     <div class="form-row">
                         <div class="col-md-4">
                             <label><small>Departamento</small></label>
-                            <select class="form-control" id="nac_departamento_id" name="nac_departamento_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                            <select class="form-control" id="nac_departamento_id" name="nac_departamento_id" required>
                                 <option value="">Seleccione</option>
                                 <?php foreach ($departamentos as $d): ?>
                                     <option value="<?php echo (int)$d['id']; ?>" <?php echo ((int)$d['id'] === $nac_dep_id) ? 'selected' : ''; ?>>
@@ -222,13 +222,13 @@ function e(mixed $t): string { return htmlspecialchars((string)$t, ENT_QUOTES, '
                         </div>
                         <div class="col-md-4">
                             <label><small>Municipio</small></label>
-                            <select class="form-control" id="nac_municipio_id" name="nac_municipio_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                            <select class="form-control" id="nac_municipio_id" name="nac_municipio_id" required>
                                 <option value="">Seleccione</option>
                             </select>
                         </div>
                         <div class="col-md-4">
                             <label><small>Distrito</small></label>
-                            <select class="form-control" id="nac_distrito_nacimiento_id" name="nac_distrito_nacimiento_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                            <select class="form-control" id="nac_distrito_nacimiento_id" name="nac_distrito_nacimiento_id" required>
                                 <option value="">Seleccione</option>
                             </select>
                         </div>
@@ -315,12 +315,12 @@ function e(mixed $t): string { return htmlspecialchars((string)$t, ENT_QUOTES, '
                     </label>
                 </div>
 
-                <div id="def_ubicacion_section" <?php echo (!empty($c['es_exterior'])) ? 'style="display:none"' : ''; ?>>
+                <div id="def_ubicacion_section">
                     <h6 class="mt-3 text-muted">Lugar de Fallecimiento</h6>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label><small>Departamento</small></label>
-                            <select class="form-control" name="def_departamento_id" id="def_departamento_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                            <select class="form-control" name="def_departamento_id" id="def_departamento_id" required>
                                 <option value="">Seleccione Departamento</option>
                                 <?php foreach ($departamentos as $d): ?>
                                     <option value="<?php echo (int)$d['id']; ?>" <?php echo ((int)$d['id'] === (int)($c['def_departamento_id'] ?? 0)) ? 'selected' : ''; ?>>
@@ -331,13 +331,13 @@ function e(mixed $t): string { return htmlspecialchars((string)$t, ENT_QUOTES, '
                         </div>
                         <div class="form-group col-md-4">
                             <label><small>Municipio</small></label>
-                            <select class="form-control" name="def_municipio_id" id="def_municipio_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                            <select class="form-control" name="def_municipio_id" id="def_municipio_id" required>
                                 <option value="">Seleccione Municipio</option>
                             </select>
                         </div>
                         <div class="form-group col-md-4">
                             <label><small>Distrito</small></label>
-                            <select class="form-control" name="def_distrito_id" id="def_distrito_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                            <select class="form-control" name="def_distrito_id" id="def_distrito_id" required>
                                 <option value="">Seleccione Distrito</option>
                             </select>
                         </div>
@@ -470,16 +470,30 @@ $(document).ready(function () {
     $(document).on('input', '.text-uppercase', function(){ this.value = this.value.toUpperCase(); });
 
     /* ── Exterior toggles ────────────────────────────────── */
-    $('#nac_es_exterior').on('change', function(){
-        var ext = this.checked;
-        $('#nac_ubicacion_section').toggle(!ext);
-        $('#nac_departamento_id, #nac_municipio_id, #nac_distrito_nacimiento_id').prop('required', !ext);
-    });
-    $('#def_es_exterior').on('change', function(){
-        var ext = this.checked;
-        $('#def_ubicacion_section').toggle(!ext);
-        $('#def_departamento_id, #def_municipio_id, #def_distrito_id').prop('required', !ext);
-    });
+    function isTerritorioExtranjero($select) {
+        return $.trim($select.find('option:selected').text()).toLowerCase() === 'territorio extranjero';
+    }
+
+    function applyTerritorioRule(prefix) {
+        const $dep  = $('#' + prefix + '_departamento_id');
+        const $muni = $('#' + prefix + '_municipio_id');
+        const $dist = prefix === 'nac' ? $('#nac_distrito_nacimiento_id') : $('#def_distrito_id');
+        const $muniNombre = $('#' + prefix + '_municipio_nombre');
+        const $distNombre = $('#' + prefix + '_distrito_nombre');
+        const territorio = isTerritorioExtranjero($dep);
+
+        if (territorio) {
+            $muni.val('').html('<option value="">Seleccione Municipio</option>').prop('disabled', true).prop('required', false);
+            $dist.val('').html('<option value="">Seleccione Distrito</option>').prop('disabled', true).prop('required', false);
+            $muniNombre.val('');
+            $distNombre.val('');
+            return true;
+        }
+
+        $muni.prop('disabled', false).prop('required', true);
+        $dist.prop('required', true);
+        return false;
+    }
 
     /* ── NAC Padre toggle ────────────────────────────────── */
     $('#nac_check_padre').on('change', function(){ $('#nac_contenedor_padre').toggle(this.checked); });
@@ -532,19 +546,22 @@ $(document).ready(function () {
 
     /* ── NAC cascade ─────────────────────────────────────── */
     if (tipo === 'NO_REGISTRO_NAC' && pre.nac_dep_id) {
-        loadMunicipios(pre.nac_dep_id, $('#nac_municipio_id'), $('#nac_distrito_nacimiento_id'), function(){
-            $('#nac_municipio_id').val(pre.nac_muni_id);
-            $('#nac_municipio_nombre').val($("#nac_municipio_id option:selected").text());
-            loadDistritos(pre.nac_muni_id, $('#nac_distrito_nacimiento_id'), function(){
-                $('#nac_distrito_nacimiento_id').val(pre.nac_dist_id);
-                $('#nac_distrito_nombre').val($("#nac_distrito_nacimiento_id option:selected").text());
+        if (!applyTerritorioRule('nac')) {
+            loadMunicipios(pre.nac_dep_id, $('#nac_municipio_id'), $('#nac_distrito_nacimiento_id'), function(){
+                $('#nac_municipio_id').val(pre.nac_muni_id);
+                $('#nac_municipio_nombre').val($("#nac_municipio_id option:selected").text());
+                loadDistritos(pre.nac_muni_id, $('#nac_distrito_nacimiento_id'), function(){
+                    $('#nac_distrito_nacimiento_id').val(pre.nac_dist_id);
+                    $('#nac_distrito_nombre').val($("#nac_distrito_nacimiento_id option:selected").text());
+                });
             });
-        });
+        }
     }
 
     $('#nac_departamento_id').on('change', function(){
         var depId = $(this).val();
         $('#nac_departamento_nombre').val($("#nac_departamento_id option:selected").text());
+        if (applyTerritorioRule('nac')) return;
         loadMunicipios(depId, $('#nac_municipio_id'), $('#nac_distrito_nacimiento_id'), null);
     });
     $('#nac_municipio_id').on('change', function(){
@@ -558,19 +575,22 @@ $(document).ready(function () {
 
     /* ── DEF cascade ─────────────────────────────────────── */
     if (tipo === 'NO_REGISTRO_DEF' && pre.def_dep_id) {
-        loadMunicipios(pre.def_dep_id, $('#def_municipio_id'), $('#def_distrito_id'), function(){
-            $('#def_municipio_id').val(pre.def_muni_id);
-            $('#def_municipio_nombre').val($("#def_municipio_id option:selected").text());
-            loadDistritos(pre.def_muni_id, $('#def_distrito_id'), function(){
-                $('#def_distrito_id').val(pre.def_dist_id);
-                $('#def_distrito_nombre').val($("#def_distrito_id option:selected").text());
+        if (!applyTerritorioRule('def')) {
+            loadMunicipios(pre.def_dep_id, $('#def_municipio_id'), $('#def_distrito_id'), function(){
+                $('#def_municipio_id').val(pre.def_muni_id);
+                $('#def_municipio_nombre').val($("#def_municipio_id option:selected").text());
+                loadDistritos(pre.def_muni_id, $('#def_distrito_id'), function(){
+                    $('#def_distrito_id').val(pre.def_dist_id);
+                    $('#def_distrito_nombre').val($("#def_distrito_id option:selected").text());
+                });
             });
-        });
+        }
     }
 
     $('#def_departamento_id').on('change', function(){
         var depId = $(this).val();
         $('#def_departamento_nombre').val($("#def_departamento_id option:selected").text());
+        if (applyTerritorioRule('def')) return;
         loadMunicipios(depId, $('#def_municipio_id'), $('#def_distrito_id'), null);
     });
     $('#def_municipio_id').on('change', function(){
