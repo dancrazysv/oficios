@@ -4,10 +4,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/check_session.php';
 require_once __DIR__ . '/db_config.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 $rol            = $_SESSION['user_rol']      ?? 'normal';
 $nombre_usuario = $_SESSION['nombre_usuario'] ?? 'Usuario';
 
@@ -55,21 +51,46 @@ try {
         }
     }
 
-    /* ── Resolución de ubicación DEF ─────────────────────────────── */
+    /* ── Resolución de ubicación DEF (robusta para datos legacy) ── */
+    $def_dep_id    = (int)($c['def_departamento_id'] ?? 0);
+    $def_muni_id   = (int)($c['def_municipio_id'] ?? 0);
+    $def_dist_id   = (int)($c['def_distrito_id'] ?? 0);
     $def_dep_nombre = ''; $def_muni_nombre = ''; $def_dist_nombre = '';
-    if (!empty($c['def_departamento_id'])) {
+
+    if ($def_dist_id > 0 && ($def_dep_id === 0 || $def_muni_id === 0)) {
+        $sq = $pdo->prepare("
+            SELECT d.id AS dist_id, d.nombre AS dist_nombre,
+                   m.id AS muni_id, m.nombre AS muni_nombre,
+                   dep.id AS dep_id, dep.nombre AS dep_nombre
+            FROM distritos d
+            JOIN municipios m ON d.municipio_id = m.id
+            JOIN departamentos dep ON m.departamento_id = dep.id
+            WHERE d.id = ? LIMIT 1
+        ");
+        $sq->execute([$def_dist_id]);
+        $row = $sq->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $def_dep_id      = (int)$row['dep_id'];
+            $def_muni_id     = (int)$row['muni_id'];
+            $def_dep_nombre  = (string)$row['dep_nombre'];
+            $def_muni_nombre = (string)$row['muni_nombre'];
+            $def_dist_nombre = (string)$row['dist_nombre'];
+        }
+    }
+
+    if ($def_dep_nombre === '' && $def_dep_id > 0) {
         $sq = $pdo->prepare("SELECT nombre FROM departamentos WHERE id = ? LIMIT 1");
-        $sq->execute([$c['def_departamento_id']]);
+        $sq->execute([$def_dep_id]);
         $def_dep_nombre = (string)($sq->fetchColumn() ?: '');
     }
-    if (!empty($c['def_municipio_id'])) {
+    if ($def_muni_nombre === '' && $def_muni_id > 0) {
         $sq = $pdo->prepare("SELECT nombre FROM municipios WHERE id = ? LIMIT 1");
-        $sq->execute([$c['def_municipio_id']]);
+        $sq->execute([$def_muni_id]);
         $def_muni_nombre = (string)($sq->fetchColumn() ?: '');
     }
-    if (!empty($c['def_distrito_id'])) {
+    if ($def_dist_nombre === '' && $def_dist_id > 0) {
         $sq = $pdo->prepare("SELECT nombre FROM distritos WHERE id = ? LIMIT 1");
-        $sq->execute([$c['def_distrito_id']]);
+        $sq->execute([$def_dist_id]);
         $def_dist_nombre = (string)($sq->fetchColumn() ?: '');
     }
 
@@ -323,7 +344,7 @@ function e(mixed $t): string { return htmlspecialchars((string)$t, ENT_QUOTES, '
                             <select class="form-control" name="def_departamento_id" id="def_departamento_id" required>
                                 <option value="">Seleccione Departamento</option>
                                 <?php foreach ($departamentos as $d): ?>
-                                    <option value="<?php echo (int)$d['id']; ?>" <?php echo ((int)$d['id'] === (int)($c['def_departamento_id'] ?? 0)) ? 'selected' : ''; ?>>
+                                    <option value="<?php echo (int)$d['id']; ?>" <?php echo ((int)$d['id'] === $def_dep_id) ? 'selected' : ''; ?>>
                                         <?php echo e($d['nombre']); ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -456,9 +477,9 @@ $(document).ready(function () {
         nac_dep_id:   <?php echo (int)$nac_dep_id; ?>,
         nac_muni_id:  <?php echo (int)$nac_muni_id; ?>,
         nac_dist_id:  <?php echo (int)$nac_dist_id; ?>,
-        def_dep_id:   <?php echo (int)($c['def_departamento_id'] ?? 0); ?>,
-        def_muni_id:  <?php echo (int)($c['def_municipio_id'] ?? 0); ?>,
-        def_dist_id:  <?php echo (int)($c['def_distrito_id'] ?? 0); ?>
+        def_dep_id:   <?php echo $def_dep_id; ?>,
+        def_muni_id:  <?php echo $def_muni_id; ?>,
+        def_dist_id:  <?php echo $def_dist_id; ?>
     };
 
     /* ── Load hospitals list ──────────────────────────────── */
