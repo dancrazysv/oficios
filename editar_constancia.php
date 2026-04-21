@@ -8,66 +8,69 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$rol = $_SESSION['user_rol'] ?? 'normal';
+$rol            = $_SESSION['user_rol']      ?? 'normal';
 $nombre_usuario = $_SESSION['nombre_usuario'] ?? 'Usuario';
-$area_usuario = $_SESSION['area'] ?? '';
-
-if (!in_array($rol, ['administrador', 'supervisor'], true)) {
-    die("Acceso denegado. No tienes permisos para editar este registro.");
-}
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$id) {
-    die("ID de oficio inválido.");
+    die("ID de constancia inválido.");
 }
 
 try {
-    $stmt = $pdo->prepare("
-        SELECT oi.*, i.nombre_institucion, i.unidad_dependencia, i.email_contacto, i.ubicacion_sede
-        FROM oficios_institucionales oi
-        JOIN instituciones i ON oi.id_institucion = i.id
-        WHERE oi.id = ?
-        LIMIT 1
-    ");
+    /* ── Constancia principal ─────────────────────────────────────── */
+    $stmt = $pdo->prepare("SELECT * FROM constancias WHERE id = ? LIMIT 1");
     $stmt->execute([$id]);
-    $oficio = $stmt->fetch(PDO::FETCH_ASSOC);
+    $c = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$oficio) {
-        die("Oficio no encontrado.");
+    if (!$c) {
+        die("Constancia no encontrada.");
     }
 
-    $stmt_ent = $pdo->prepare("
-        SELECT *
-        FROM oficios_institucionales_entradas
-        WHERE id_oficio_inst = ?
-        ORDER BY id ASC
-    ");
-    $stmt_ent->execute([$id]);
-    $entradas_raw = $stmt_ent->fetchAll(PDO::FETCH_ASSOC);
+    /* ── Catálogos generales ──────────────────────────────────────── */
+    $tipos_documento = $pdo->query("SELECT id, nombre FROM tipos_documento ORDER BY nombre")->fetchAll(PDO::FETCH_ASSOC);
+    $departamentos   = $pdo->query("SELECT id, nombre FROM departamentos ORDER BY nombre")->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt_det = $pdo->prepare("
-        SELECT *
-        FROM oficios_institucionales_detalle
-        WHERE id_oficio_inst = ?
-        ORDER BY id ASC
-    ");
-    $stmt_det->execute([$id]);
-    $detalles = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
+    /* ── Soportes NAC / DEF ───────────────────────────────────────── */
+    $soportes_nac = $pdo->query("SELECT codigo_slug, nombre_oficial FROM catalogo_soportes WHERE categoria IN ('NACIMIENTO','AMBOS') ORDER BY id")->fetchAll(PDO::FETCH_ASSOC);
+    $soportes_def = $pdo->query("SELECT codigo_slug, nombre_oficial FROM catalogo_soportes WHERE categoria IN ('DEFUNCION','AMBOS') ORDER BY id")->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt_inst = $pdo->query("
-        SELECT id, nombre_institucion, unidad_dependencia, email_contacto, ubicacion_sede
-        FROM instituciones
-        WHERE estado = 1
-        ORDER BY nombre_institucion ASC
-    ");
-    $instituciones = $stmt_inst->fetchAll(PDO::FETCH_ASSOC);
+    /* ── Resolución de ubicación NAC (distrito → municipio → depto) ─ */
+    $nac_dep_id = 0; $nac_muni_id = 0; $nac_dist_id = 0;
+    $nac_dep_nombre = ''; $nac_muni_nombre = ''; $nac_dist_nombre = '';
+    if (!empty($c['distrito_nacimiento_id'])) {
+        $sq = $pdo->prepare("
+            SELECT d.id AS dist_id, d.nombre AS dist_nombre,
+                   m.id AS muni_id, m.nombre AS muni_nombre,
+                   dep.id AS dep_id, dep.nombre AS dep_nombre
+            FROM distritos d
+            JOIN municipios m ON d.municipio_id = m.id
+            JOIN departamentos dep ON m.departamento_id = dep.id
+            WHERE d.id = ? LIMIT 1");
+        $sq->execute([$c['distrito_nacimiento_id']]);
+        $row = $sq->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $nac_dep_id    = (int)$row['dep_id'];   $nac_dep_nombre  = $row['dep_nombre'];
+            $nac_muni_id   = (int)$row['muni_id'];  $nac_muni_nombre = $row['muni_nombre'];
+            $nac_dist_id   = (int)$row['dist_id'];  $nac_dist_nombre = $row['dist_nombre'];
+        }
+    }
 
-    $carpeta_anexos = __DIR__ . '/anexos_institucionales/' . $oficio['referencia_salida'] . '/';
-    $archivos_adjuntos = [];
-    if (is_dir($carpeta_anexos)) {
-        $archivos_adjuntos = array_values(array_filter(scandir($carpeta_anexos), function($f) use ($carpeta_anexos) {
-            return $f !== '.' && $f !== '..' && strtolower(pathinfo($f, PATHINFO_EXTENSION)) === 'pdf' && is_file($carpeta_anexos . $f);
-        }));
+    /* ── Resolución de ubicación DEF ─────────────────────────────── */
+    $def_dep_nombre = ''; $def_muni_nombre = ''; $def_dist_nombre = '';
+    if (!empty($c['def_departamento_id'])) {
+        $sq = $pdo->prepare("SELECT nombre FROM departamentos WHERE id = ? LIMIT 1");
+        $sq->execute([$c['def_departamento_id']]);
+        $def_dep_nombre = (string)($sq->fetchColumn() ?: '');
+    }
+    if (!empty($c['def_municipio_id'])) {
+        $sq = $pdo->prepare("SELECT nombre FROM municipios WHERE id = ? LIMIT 1");
+        $sq->execute([$c['def_municipio_id']]);
+        $def_muni_nombre = (string)($sq->fetchColumn() ?: '');
+    }
+    if (!empty($c['def_distrito_id'])) {
+        $sq = $pdo->prepare("SELECT nombre FROM distritos WHERE id = ? LIMIT 1");
+        $sq->execute([$c['def_distrito_id']]);
+        $def_dist_nombre = (string)($sq->fetchColumn() ?: '');
     }
 
     if (empty($_SESSION['csrf_token'])) {
@@ -76,512 +79,544 @@ try {
     $csrf_token = $_SESSION['csrf_token'];
 
 } catch (Throwable $e) {
-    error_log("Error editar_oficio_institucional: " . $e->getMessage());
+    error_log("Error editar_constancia: " . $e->getMessage());
     die("Error cargando datos: " . $e->getMessage());
 }
 
-function e($t) { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
+function e(mixed $t): string { return htmlspecialchars((string)$t, ENT_QUOTES, 'UTF-8'); }
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Editar Oficio Institucional</title>
+    <title>Editar Certificación | <?php echo e($c['numero_constancia']); ?></title>
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css" rel="stylesheet" />
     <style>
-        body { background:#f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .container { margin-top:30px; max-width: 1100px; }
-        .card { border: none; border-radius: 12px; }
-        .persona-row { background: #fff; padding: 20px; border-radius: 10px; border-left: 5px solid #007bff; position: relative; margin-bottom: 15px; }
-        .oficio-bloque { background: #e9ecef; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #6c757d; }
-        .oficio-header { font-weight: bold; color: #495057; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .peticion-item { background: #fff; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #dee2e6; }
-        .peticion-header { font-size: 0.85rem; color: #6c757d; margin-bottom: 8px; }
-        .btn-remove { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; color: #dc3545; cursor: pointer; }
-        .panel-data { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 10px; border: 1px solid #dee2e6; }
-        .adjunto-item { display: inline-block; margin: 5px; padding: 5px 10px; background: #e9ecef; border-radius: 4px; font-size: 0.85rem; }
-        .adjunto-item .btn-remove-adjunto { margin-left: 8px; color: #dc3545; cursor: pointer; font-weight: bold; }
-        .select2-container { width: 100% !important; }
-        .btn-add-peticion { font-size: 0.8rem; padding: 0.25rem 0.5rem; }
+        body { background:#f8f9fa; font-family:'Segoe UI',Tahoma,Verdana; }
+        .main-card { background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,.08); margin-top:30px; }
+        .section-title { border-bottom:2px solid #007bff; padding-bottom:8px; margin-bottom:16px; color:#007bff; font-weight:bold; }
     </style>
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow mb-4">
     <a class="navbar-brand font-weight-bold" href="dashboard.php">Sistema de Trámites</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a class="nav-link" href="crear_oficio.php">Crear Oficio</a></li>
             <li class="nav-item"><a class="nav-link" href="crear_constancia.php">Crear Certificación</a></li>
-            <li class="nav-item"><a class="nav-link" href="crear_oficio_institucional.php">Crear Oficio Inst.</a></li>
             <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
-            <?php if ($rol === 'administrador'): ?>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navCatalogos" role="button" data-toggle="dropdown">Administración</a>
-                <div class="dropdown-menu shadow">
-                    <a class="dropdown-item" href="catalogos/admin_departamentos.php">Departamentos</a>
-                    <a class="dropdown-item" href="catalogos/admin_municipios.php">Municipios</a>
-                    <a class="dropdown-item" href="catalogos/admin_distritos.php">Distritos</a>
-                    <a class="dropdown-item" href="catalogos/admin_instituciones.php">Instituciones</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="catalogos/admin_tipos_documento.php">Tipos de Documento</a>
-                    <a class="dropdown-item" href="catalogos/admin_tipos_constancia.php">Tipos de Constancia</a>
-                    <a class="dropdown-item" href="catalogos/admin_soportes.php">Soportes</a>
-                    <a class="dropdown-item" href="catalogos/admin_hospitales.php">Hospitales</a>
-                    <a class="dropdown-item" href="catalogos/admin_oficiantes.php">Oficiantes</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="catalogos/admin_usuarios.php">Usuarios</a>
-                    <a class="dropdown-item" href="catalogos/admin_solicitantes.php">Solicitantes</a>
-                </div>
-            </li>
-            <?php endif; ?>
-            <?php if (in_array($rol, ['administrador', 'supervisor'], true)): ?>
-            <li class="nav-item"><a class="nav-link" href="panel_envios.php">Panel Envíos</a></li>
-            <?php endif; ?>
         </ul>
-        <span class="navbar-text mr-3 text-white">Editando: <strong><?php echo e($oficio['referencia_salida']); ?></strong></span>
+        <span class="navbar-text mr-3 text-white">Bienvenido, <strong><?php echo e($nombre_usuario); ?></strong></span>
         <a href="logout.php" class="btn btn-outline-light btn-sm">Cerrar Sesión</a>
     </div>
 </nav>
 
 <div class="container mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3>✏️ Editar Oficio Institucional</h3>
-        <span class="badge badge-warning p-2">Modo Edición</span>
-    </div>
+    <div class="main-card">
+        <h4 class="mb-1">✏️ Editar Certificación</h4>
+        <p class="text-muted mb-4">Referencia: <strong><?php echo e($c['numero_constancia']); ?></strong> &mdash; Tipo: <strong><?php echo e($c['tipo_constancia']); ?></strong></p>
 
-    <?php if (isset($_GET['msg'])): ?>
-        <?php if ($_GET['msg'] === 'actualizado'): ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                ✅ Oficio actualizado correctamente.
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-            </div>
-        <?php elseif ($_GET['msg'] === 'error'): ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                ❌ Error al actualizar: <?php echo e($_GET['error'] ?? 'Detalles no disponibles'); ?>
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-            </div>
-        <?php endif; ?>
-    <?php endif; ?>
-
-    <?php if ($oficio['estado_validacion'] !== 'PENDIENTE'): ?>
+        <?php if ($c['estado_validacion'] !== 'PENDIENTE'): ?>
         <div class="alert alert-warning">
-            ⚠️ Este oficio tiene estado <strong><?php echo e($oficio['estado_validacion']); ?></strong>.
-            La edición puede afectar documentos ya generados. Proceda con precaución.
+            ⚠️ Esta constancia tiene estado <strong><?php echo e($c['estado_validacion']); ?></strong>. La edición regenerará el PDF.
         </div>
-    <?php endif; ?>
+        <?php endif; ?>
 
-    <form id="formEditarOficioInst" method="POST" action="actualizar_oficio_institucional.php" enctype="multipart/form-data">
-        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-        <input type="hidden" name="id_oficio" value="<?php echo (int)$oficio['id']; ?>">
+        <form id="formEditarConstancia">
+            <input type="hidden" name="csrf_token"       value="<?php echo e($csrf_token); ?>">
+            <input type="hidden" name="id_constancia"    value="<?php echo (int)$c['id']; ?>">
+            <input type="hidden" name="tipo_constancia_id" value="<?php echo e($c['tipo_constancia']); ?>">
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-primary text-white font-weight-bold">I. INFORMACIÓN GENERAL</div>
-            <div class="card-body">
+            <!-- Hidden location name fields (updated by JS cascade) -->
+            <input type="hidden" name="nac_municipio_nombre"   id="nac_municipio_nombre"   value="<?php echo e($nac_muni_nombre); ?>">
+            <input type="hidden" name="nac_departamento_nombre" id="nac_departamento_nombre" value="<?php echo e($nac_dep_nombre); ?>">
+            <input type="hidden" name="nac_distrito_nombre"    id="nac_distrito_nombre"    value="<?php echo e($nac_dist_nombre); ?>">
+            <input type="hidden" name="def_departamento_nombre" id="def_departamento_nombre" value="<?php echo e($def_dep_nombre); ?>">
+            <input type="hidden" name="def_municipio_nombre"   id="def_municipio_nombre"   value="<?php echo e($def_muni_nombre); ?>">
+            <input type="hidden" name="def_distrito_nombre"    id="def_distrito_nombre"    value="<?php echo e($def_dist_nombre); ?>">
+
+            <!-- ══ DATOS DEL SOLICITANTE ══════════════════════════════════════ -->
+            <div class="p-4 border rounded bg-light mb-4 shadow-sm">
+                <h5 class="section-title">Datos del Solicitante</h5>
                 <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label class="font-weight-bold">Institución Solicitante:</label>
-                        <select name="id_institucion" id="id_institucion" class="form-control" required style="width: 100%;">
-                            <option value="">-- Seleccione --</option>
-                            <?php foreach($instituciones as $ins):
-                                $label = e($ins['nombre_institucion']);
-                                if (!empty($ins['unidad_dependencia'])) $label .= ' - ' . e($ins['unidad_dependencia']);
-                                if (!empty($ins['ubicacion_sede'])) $label .= ' - ' . e($ins['ubicacion_sede']);
-                            ?>
-                                <option value="<?php echo (int)$ins['id']; ?>" <?php echo ((int)$ins['id'] === (int)$oficio['id_institucion']) ? 'selected' : ''; ?> data-email="<?php echo e($ins['email_contacto'] ?? ''); ?>">
-                                    <?php echo $label; ?>
+                    <div class="col-md-4">
+                        <select class="form-control" name="tipo_documento_id" id="tipo_documento_id">
+                            <option value="">Tipo Documento</option>
+                            <?php foreach ($tipos_documento as $td): ?>
+                                <option value="<?php echo (int)$td['id']; ?>" <?php echo ((int)$td['id'] === (int)$c['tipo_documento_id']) ? 'selected' : ''; ?>>
+                                    <?php echo e($td['nombre']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <small class="form-text text-muted" id="email_institucion_hint"></small>
                     </div>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" name="numero_documento" value="<?php echo e($c['numero_documento']); ?>" placeholder="Número de Documento">
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <label>Nombre del Ciudadano</label>
+                    <input type="text" class="form-control font-weight-bold text-uppercase" name="nombre_solicitante" value="<?php echo e($c['nombre_solicitante']); ?>">
+                </div>
+            </div>
+
+            <!-- ══ SECCIÓN ESPECÍFICA POR TIPO ════════════════════════════════ -->
+
+            <?php if ($c['tipo_constancia'] === 'NO_REGISTRO_NAC'): ?>
+            <!-- ── NAC ─────────────────────────────────────────────────────── -->
+            <div class="form-section shadow-sm p-3 mb-4 bg-white rounded border">
+                <h5 class="text-primary mb-4 border-bottom pb-2">Datos de Nacimiento</h5>
+
+                <div class="form-group">
+                    <label><strong>No aparece registrada partida de nacimiento a nombre de:</strong></label>
+                    <input type="text" class="form-control text-uppercase" name="nac_nombre_no_registro" value="<?php echo e($c['nombre_no_registro']); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label><strong>Según: (Documento de Nacimiento)</strong></label>
+                    <select class="form-control" name="nac_tipo_soporte" id="nac_tipo_soporte">
+                        <option value="">Seleccione el documento de soporte...</option>
+                        <?php foreach ($soportes_nac as $s): ?>
+                            <option value="<?php echo e($s['codigo_slug']); ?>" <?php echo ($s['codigo_slug'] === $c['tipo_soporte']) ? 'selected' : ''; ?>>
+                                <?php echo e($s['nombre_oficial']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div id="nac_contenedor_hospital" class="form-group" <?php echo empty($c['nombre_hospital']) ? 'style="display:none"' : ''; ?>>
+                    <label><strong>Hospital / Institución</strong></label>
+                    <input type="text" class="form-control border-primary" name="nac_nombre_hospital" value="<?php echo e($c['nombre_hospital'] ?? ''); ?>" list="lista_hospitales">
+                </div>
+
+                <div class="form-row mt-3">
+                    <div class="col-md-6">
+                        <label><strong>Fecha de nacimiento</strong></label>
+                        <input type="date" class="form-control" name="nac_fecha_nacimiento" value="<?php echo e($c['fecha_nacimiento'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label><strong>Hora de nacimiento (Opcional)</strong></label>
+                        <input type="time" class="form-control" name="nac_hora_nacimiento" value="<?php echo e($c['hora_nacimiento'] ?? ''); ?>">
+                    </div>
+                </div>
+
+                <div class="custom-control custom-checkbox mb-3 mt-3">
+                    <input type="checkbox" class="custom-control-input" id="nac_es_exterior" name="es_exterior" value="1" <?php echo (!empty($c['es_exterior'])) ? 'checked' : ''; ?>>
+                    <label class="custom-control-label" for="nac_es_exterior" style="cursor:pointer">
+                        <strong>¿Es del Exterior?</strong> <small class="text-muted">(El documento omitirá Distrito, Municipio y Departamento)</small>
+                    </label>
+                </div>
+
+                <div id="nac_ubicacion_section" <?php echo (!empty($c['es_exterior'])) ? 'style="display:none"' : ''; ?>>
+                    <h6 class="mt-3 text-muted">Ubicación de Nacimiento</h6>
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <label><small>Departamento</small></label>
+                            <select class="form-control" id="nac_departamento_id" name="nac_departamento_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                                <option value="">Seleccione</option>
+                                <?php foreach ($departamentos as $d): ?>
+                                    <option value="<?php echo (int)$d['id']; ?>" <?php echo ((int)$d['id'] === $nac_dep_id) ? 'selected' : ''; ?>>
+                                        <?php echo e($d['nombre']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label><small>Municipio</small></label>
+                            <select class="form-control" id="nac_municipio_id" name="nac_municipio_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                                <option value="">Seleccione</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label><small>Distrito</small></label>
+                            <select class="form-control" id="nac_distrito_nacimiento_id" name="nac_distrito_nacimiento_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                                <option value="">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="mt-4 text-secondary border-top pt-3">Filiación</h6>
+                <div class="form-group">
+                    <label><strong>Nombre de la madre</strong></label>
+                    <input type="text" class="form-control text-uppercase" name="nac_nombre_madre" value="<?php echo e($c['nombre_madre'] ?? ''); ?>">
+                </div>
+                <div class="form-group">
+                    <label><strong>Nombre de la madre según DUI (Opcional)</strong></label>
+                    <input type="text" class="form-control text-uppercase" name="nac_nombre_madre_dui" value="<?php echo e($c['nombre_madre_dui'] ?? ''); ?>">
+                </div>
+                <div class="custom-control custom-checkbox mb-2">
+                    <input type="checkbox" class="custom-control-input" id="nac_check_padre" <?php echo !empty($c['nombre_padre']) ? 'checked' : ''; ?>>
+                    <label class="custom-control-label" for="nac_check_padre" style="cursor:pointer">Incluir nombre del padre</label>
+                </div>
+                <div id="nac_contenedor_padre" class="form-group" <?php echo empty($c['nombre_padre']) ? 'style="display:none"' : ''; ?>>
+                    <label><strong>Nombre del padre</strong></label>
+                    <input type="text" class="form-control text-uppercase" name="nac_nombre_padre" value="<?php echo e($c['nombre_padre'] ?? ''); ?>">
+                </div>
+            </div>
+
+            <?php elseif ($c['tipo_constancia'] === 'NO_REGISTRO_DEF'): ?>
+            <!-- ── DEF ─────────────────────────────────────────────────────── -->
+            <div class="form-section shadow-sm p-3 mb-4 bg-white rounded border">
+                <h5 class="text-primary mb-4 border-bottom pb-2">Datos de Defunción</h5>
+
+                <div class="form-group">
+                    <label><strong>No aparece registrada partida de defunción a nombre de:</strong></label>
+                    <input type="text" class="form-control text-uppercase" name="def_nombre_no_registro" value="<?php echo e($c['nombre_no_registro']); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label><strong>Según: (Documento de Defunción)</strong></label>
+                    <select class="form-control" name="def_tipo_soporte" id="def_tipo_soporte">
+                        <option value="">Seleccione el documento de soporte...</option>
+                        <?php foreach ($soportes_def as $s): ?>
+                            <option value="<?php echo e($s['codigo_slug']); ?>" <?php echo ($s['codigo_slug'] === $c['tipo_soporte']) ? 'selected' : ''; ?>>
+                                <?php echo e($s['nombre_oficial']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div id="def_contenedor_hospital" class="form-group" <?php echo empty($c['nombre_hospital']) ? 'style="display:none"' : ''; ?>>
+                    <label><strong>Hospital / Institución</strong></label>
+                    <input class="form-control border-danger" list="lista_hospitales" name="def_nombre_hospital" value="<?php echo e($c['nombre_hospital'] ?? ''); ?>">
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label><strong>Fecha de defunción</strong></label>
+                        <input type="date" class="form-control" name="def_fecha_defuncion" value="<?php echo e($c['fecha_defuncion'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label><strong>Hora (opcional)</strong></label>
+                        <input type="time" class="form-control" name="def_hora_defuncion" value="<?php echo e($c['hora_defuncion'] ?? ''); ?>">
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <label><strong>Nombre según otro documento (Opcional)</strong></label>
+                    <input type="text" class="form-control text-uppercase" name="def_nombre_segun_doc" value="<?php echo e($c['def_nombre_segun_doc'] ?? ''); ?>">
+                </div>
+                <div class="form-group">
+                    <label><strong>Tipo de ese documento</strong></label>
+                    <select class="form-control" name="def_tipo_doc_segun_id">
+                        <option value="">Seleccione (opcional)</option>
+                        <?php foreach ($tipos_documento as $td): ?>
+                            <option value="<?php echo (int)$td['id']; ?>" <?php echo ((int)$td['id'] === (int)($c['def_tipo_doc_segun_id'] ?? 0)) ? 'selected' : ''; ?>>
+                                <?php echo e($td['nombre']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="custom-control custom-checkbox mb-3 mt-3">
+                    <input type="checkbox" class="custom-control-input" id="def_es_exterior" name="es_exterior" value="1" <?php echo (!empty($c['es_exterior'])) ? 'checked' : ''; ?>>
+                    <label class="custom-control-label" for="def_es_exterior" style="cursor:pointer">
+                        <strong>¿Es del Exterior?</strong> <small class="text-muted">(El documento omitirá Distrito, Municipio y Departamento)</small>
+                    </label>
+                </div>
+
+                <div id="def_ubicacion_section" <?php echo (!empty($c['es_exterior'])) ? 'style="display:none"' : ''; ?>>
+                    <h6 class="mt-3 text-muted">Lugar de Fallecimiento</h6>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label><small>Departamento</small></label>
+                            <select class="form-control" name="def_departamento_id" id="def_departamento_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                                <option value="">Seleccione Departamento</option>
+                                <?php foreach ($departamentos as $d): ?>
+                                    <option value="<?php echo (int)$d['id']; ?>" <?php echo ((int)$d['id'] === (int)($c['def_departamento_id'] ?? 0)) ? 'selected' : ''; ?>>
+                                        <?php echo e($d['nombre']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><small>Municipio</small></label>
+                            <select class="form-control" name="def_municipio_id" id="def_municipio_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                                <option value="">Seleccione Municipio</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><small>Distrito</small></label>
+                            <select class="form-control" name="def_distrito_id" id="def_distrito_id" <?php echo empty($c['es_exterior']) ? 'required' : ''; ?>>
+                                <option value="">Seleccione Distrito</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="mt-4 text-secondary border-top pt-3">Filiación</h6>
+                <div class="custom-control custom-checkbox mb-2">
+                    <input type="checkbox" class="custom-control-input" id="def_check_madre" <?php echo !empty($c['nombre_madre']) ? 'checked' : ''; ?>>
+                    <label class="custom-control-label" for="def_check_madre" style="cursor:pointer">Incluir nombre de la madre</label>
+                </div>
+                <div id="def_contenedor_madre" <?php echo empty($c['nombre_madre']) ? 'style="display:none"' : ''; ?> class="mt-2 p-3 border rounded bg-light">
+                    <div class="form-group">
+                        <label>Nombre de la madre</label>
+                        <input type="text" class="form-control text-uppercase" name="def_nombre_madre" value="<?php echo e($c['nombre_madre'] ?? ''); ?>">
+                    </div>
+                    <div class="form-group mb-0">
+                        <label>Nombre de la madre según DUI (Opcional)</label>
+                        <input type="text" class="form-control text-uppercase" name="def_nombre_madre_dui" value="<?php echo e($c['nombre_madre_dui'] ?? ''); ?>">
+                    </div>
+                </div>
+                <div class="custom-control custom-checkbox mt-3 mb-2">
+                    <input type="checkbox" class="custom-control-input" id="def_check_padre" <?php echo !empty($c['nombre_padre']) ? 'checked' : ''; ?>>
+                    <label class="custom-control-label" for="def_check_padre" style="cursor:pointer">Incluir nombre del padre</label>
+                </div>
+                <div id="def_contenedor_padre" <?php echo empty($c['nombre_padre']) ? 'style="display:none"' : ''; ?> class="mt-2 p-3 border rounded bg-light">
+                    <label>Nombre del padre</label>
+                    <input type="text" class="form-control text-uppercase" name="def_nombre_padre" value="<?php echo e($c['nombre_padre'] ?? ''); ?>">
+                </div>
+            </div>
+
+            <?php elseif ($c['tipo_constancia'] === 'NO_REGISTRO_MAT'): ?>
+            <!-- ── MAT ─────────────────────────────────────────────────────── -->
+            <div class="form-section shadow-sm p-3 mb-4 bg-white rounded border">
+                <h5 class="text-primary mb-4 border-bottom pb-2">No Registro de Matrimonio</h5>
+
+                <div class="custom-control custom-checkbox mb-3">
+                    <input type="checkbox" class="custom-control-input" id="mat_es_exterior" name="es_exterior" value="1" <?php echo (!empty($c['es_exterior'])) ? 'checked' : ''; ?>>
+                    <label class="custom-control-label" for="mat_es_exterior" style="cursor:pointer">
+                        <strong>¿Es del Exterior?</strong>
+                    </label>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label class="small font-weight-bold">Email de Envío:</label>
-                        <input type="email" name="email_envio" class="form-control" value="<?php echo e($oficio['email_envio'] ?? ''); ?>" placeholder="opcional">
+                        <label>No aparece registrada partida de matrimonio a nombre de:</label>
+                        <input type="text" class="form-control text-uppercase" name="mat_nombre_no_registro" value="<?php echo e($c['mat_contrayente_1'] ?? $c['nombre_no_registro']); ?>">
                     </div>
-                    <div class="form-group col-md-3">
-                        <label class="small font-weight-bold">Estado Actual:</label>
-                        <input type="text" class="form-control" value="<?php echo e($oficio['estado_validacion']); ?>" disabled>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="small font-weight-bold">Fecha del Documento:</label>
-                        <input type="date" name="fecha_documento" class="form-control" value="<?php echo e($oficio['fecha_documento']); ?>" max="<?php echo date('Y-m-d'); ?>">
+                    <div class="form-group col-md-6">
+                        <label>Y de (Segundo contrayente - Opcional):</label>
+                        <input type="text" class="form-control text-uppercase" name="mat_nombre_contrayente_dos" value="<?php echo e($c['mat_contrayente_2'] ?? ''); ?>">
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                <span class="font-weight-bold">II. OFICIOS DE ENTRADA</span>
-                <button type="button" id="btn_add_oficio_bloque" class="btn btn-success btn-sm font-weight-bold">+ Agregar Oficio de Entrada</button>
-            </div>
-            <div class="card-body" id="contenedor_oficios_bloques">
-                <?php if (empty($entradas_raw)): ?>
-                    <div class="oficio-bloque" data-oficio-index="0">
-                        <div class="oficio-header">
-                            <span>📬 Oficio de Entrada #1</span>
-                            <button type="button" class="btn btn-sm btn-outline-danger btn-remove-oficio-bloque">Eliminar Oficio</button>
-                        </div>
-                        <div class="form-row mb-3">
-                            <div class="form-group col-md-3">
-                                <label class="small font-weight-bold">N° Oficio Entrada:</label>
-                                <input type="text" name="num_oficio_in[]" class="form-control form-control-sm oficio-num" required>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="small font-weight-bold">Referencia:</label>
-                                <input type="text" name="ref_expediente_in[]" class="form-control form-control-sm oficio-ref">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="small font-weight-bold">Fecha Documento:</label>
-                                <input type="date" name="fecha_doc_in[]" class="form-control form-control-sm oficio-fecha" required>
-                            </div>
-                            <div class="form-group col-md-3 d-flex align-items-end">
-                                <button type="button" class="btn btn-sm btn-outline-primary btn-add-peticion" data-oficio-index="0">+ Agregar Petición</button>
-                            </div>
-                        </div>
-                        <div class="peticiones-container" data-oficio-index="0">
-                            <div class="peticion-item">
-                                <div class="peticion-header">Petición #1</div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label class="small font-weight-bold text-danger">Partida Solicitada:</label>
-                                        <select name="tipo_partida_solicitada[]" class="form-control form-control-sm" required>
-                                            <option value="NACIMIENTO">NACIMIENTO</option>
-                                            <option value="DEFUNCION">DEFUNCIÓN</option>
-                                            <option value="MATRIMONIO">MATRIMONIO</option>
-                                            <option value="DIVORCIO">DIVORCIO</option>
-                                            <option value="CEDULA">CÉDULA</option>
-                                            <option value="CARNET">CARNET MINORIDAD</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-7">
-                                        <label class="small font-weight-bold text-primary">Nombre según Oficio:</label>
-                                        <input type="text" name="nombre_segun_oficio[]" class="form-control form-control-sm text-uppercase" required>
-                                    </div>
-                                    <div class="col-md-1 d-flex align-items-end">
-                                        <button type="button" class="btn btn-sm btn-outline-danger btn-remove-peticion">🗑️</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <?php foreach ($entradas_raw as $i => $ent): ?>
-                        <div class="oficio-bloque" data-oficio-index="<?php echo (int)$i; ?>">
-                            <div class="oficio-header">
-                                <span>📬 Oficio de Entrada #<?php echo (int)$i + 1; ?></span>
-                                <button type="button" class="btn btn-sm btn-outline-danger btn-remove-oficio-bloque">Eliminar Oficio</button>
-                            </div>
-                            <input type="hidden" name="entrada_id[]" value="<?php echo (int)$ent['id']; ?>">
-                            <div class="form-row mb-3">
-                                <div class="form-group col-md-3">
-                                    <label class="small font-weight-bold">N° Oficio Entrada:</label>
-                                    <input type="text" name="num_oficio_in[]" class="form-control form-control-sm oficio-num" value="<?php echo e($ent['num_oficio_in']); ?>" required>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="small font-weight-bold">Referencia:</label>
-                                    <input type="text" name="ref_expediente_in[]" class="form-control form-control-sm oficio-ref" value="<?php echo e($ent['ref_expediente_in']); ?>">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="small font-weight-bold">Fecha Documento:</label>
-                                    <input type="date" name="fecha_doc_in[]" class="form-control form-control-sm oficio-fecha" value="<?php echo e($ent['fecha_doc_in']); ?>" required>
-                                </div>
-                                <div class="form-group col-md-3 d-flex align-items-end">
-                                    <button type="button" class="btn btn-sm btn-outline-primary btn-add-peticion" data-oficio-index="<?php echo (int)$i; ?>">+ Agregar Petición</button>
-                                </div>
-                            </div>
-                            <div class="peticiones-container" data-oficio-index="<?php echo (int)$i; ?>">
-                                <div class="peticion-item">
-                                    <div class="peticion-header">Petición #1</div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-4">
-                                            <label class="small font-weight-bold text-danger">Partida Solicitada:</label>
-                                            <select name="tipo_partida_solicitada[]" class="form-control form-control-sm" required>
-                                                <option value="NACIMIENTO" <?php echo (($ent['tipo_partida_solicitada'] ?? '') === 'NACIMIENTO') ? 'selected' : ''; ?>>NACIMIENTO</option>
-                                                <option value="DEFUNCION" <?php echo (($ent['tipo_partida_solicitada'] ?? '') === 'DEFUNCION') ? 'selected' : ''; ?>>DEFUNCIÓN</option>
-                                                <option value="MATRIMONIO" <?php echo (($ent['tipo_partida_solicitada'] ?? '') === 'MATRIMONIO') ? 'selected' : ''; ?>>MATRIMONIO</option>
-                                                <option value="DIVORCIO" <?php echo (($ent['tipo_partida_solicitada'] ?? '') === 'DIVORCIO') ? 'selected' : ''; ?>>DIVORCIO</option>
-                                                <option value="CEDULA" <?php echo (($ent['tipo_partida_solicitada'] ?? '') === 'CEDULA') ? 'selected' : ''; ?>>CÉDULA</option>
-                                                <option value="CARNET" <?php echo (($ent['tipo_partida_solicitada'] ?? '') === 'CARNET') ? 'selected' : ''; ?>>CARNET MINORIDAD</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-7">
-                                            <label class="small font-weight-bold text-primary">Nombre según Oficio:</label>
-                                            <input type="text" name="nombre_segun_oficio[]" class="form-control form-control-sm text-uppercase" value="<?php echo e($ent['nombre_solicitado']); ?>" required>
-                                        </div>
-                                        <div class="col-md-1 d-flex align-items-end">
-                                            <button type="button" class="btn btn-sm btn-outline-danger btn-remove-peticion">🗑️</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                <span class="font-weight-bold">III. RESULTADOS DE BÚSQUEDA</span>
-                <button type="button" id="btn_add_persona" class="btn btn-success btn-sm font-weight-bold">+ Agregar Registro</button>
-            </div>
-            <div class="card-body bg-light" id="contenedor_personas">
-                <?php if (empty($detalles)): ?>
-                    <div class="persona-row">
-                        <span class="btn-remove">&times;</span>
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label class="small font-weight-bold">Nombre en Nuestros Registros:</label>
-                                <input type="text" name="nombre_consultado[]" class="form-control text-uppercase form-control-sm" required>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="small font-weight-bold">Tipo Trámite:</label>
-                                <select name="tipo_tramite[]" class="form-control form-control-sm sel-tipo-tramite">
-                                    <option value="NACIMIENTO">NACIMIENTO</option>
-                                    <option value="DEFUNCION">DEFUNCIÓN</option>
-                                    <option value="MATRIMONIO">MATRIMONIO</option>
-                                    <option value="DIVORCIO">DIVORCIO</option>
-                                    <option value="CEDULA">CÉDULA</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="small font-weight-bold">Resultado:</label>
-                                <select name="resultado[]" class="form-control form-control-sm sel-resultado" required>
-                                    <option value="ENCONTRADO">ENCONTRADO</option>
-                                    <option value="NO_ENCONTRADO">NO ENCONTRADO</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="small font-weight-bold">Observaciones:</label>
-                                <input type="text" name="observaciones[]" class="form-control form-control-sm">
-                            </div>
-                        </div>
-                        <div class="panel-data">
-                            <div class="form-row mb-3">
-                                <div class="col-md-6"><label class="small font-weight-bold lbl-filiacion-1">Nombre de la Madre:</label><input type="text" name="padre_conyuge_1[]" class="form-control form-control-sm text-uppercase"></div>
-                                <div class="col-md-6"><label class="small font-weight-bold lbl-filiacion-2">Nombre del Padre:</label><input type="text" name="padre_conyuge_2[]" class="form-control form-control-sm text-uppercase"></div>
-                            </div>
-                            <div class="form-row panel-partida d-none">
-                                <div class="col-md-3"><label class="small">Partida N°:</label><input type="text" name="partida[]" class="form-control form-control-sm"></div>
-                                <div class="col-md-3"><label class="small">Folio:</label><input type="text" name="folio[]" class="form-control form-control-sm"></div>
-                                <div class="col-md-3"><label class="small">Libro:</label><input type="text" name="libro[]" class="form-control form-control-sm"></div>
-                                <div class="col-md-3"><label class="small">Año:</label><input type="number" name="anio[]" class="form-control form-control-sm" min="1900" max="<?php echo date('Y'); ?>"></div>
-                            </div>
-                            <div class="form-row panel-fecha mt-2">
-                                <div class="col-md-4"><label class="small font-weight-bold">Fecha del Evento:</label><input type="date" name="fecha_evento[]" class="form-control form-control-sm"></div>
-                            </div>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <?php foreach ($detalles as $det):
-                        $is_found = ($det['resultado'] === 'ENCONTRADO');
-                        $is_family = in_array($det['tipo_tramite'], ['MATRIMONIO', 'DIVORCIO'], true);
-                    ?>
-                        <div class="persona-row">
-                            <span class="btn-remove">&times;</span>
-                            <input type="hidden" name="detalle_id[]" value="<?php echo (int)$det['id']; ?>">
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label class="small font-weight-bold">Nombre en Nuestros Registros:</label>
-                                    <input type="text" name="nombre_consultado[]" class="form-control text-uppercase form-control-sm" value="<?php echo e($det['nombre_consultado']); ?>" required>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="small font-weight-bold">Tipo Trámite:</label>
-                                    <select name="tipo_tramite[]" class="form-control form-control-sm sel-tipo-tramite">
-                                        <option value="NACIMIENTO" <?php echo (($det['tipo_tramite'] ?? '') === 'NACIMIENTO') ? 'selected' : ''; ?>>NACIMIENTO</option>
-                                        <option value="DEFUNCION" <?php echo (($det['tipo_tramite'] ?? '') === 'DEFUNCION') ? 'selected' : ''; ?>>DEFUNCIÓN</option>
-                                        <option value="MATRIMONIO" <?php echo (($det['tipo_tramite'] ?? '') === 'MATRIMONIO') ? 'selected' : ''; ?>>MATRIMONIO</option>
-                                        <option value="DIVORCIO" <?php echo (($det['tipo_tramite'] ?? '') === 'DIVORCIO') ? 'selected' : ''; ?>>DIVORCIO</option>
-                                        <option value="CEDULA" <?php echo (($det['tipo_tramite'] ?? '') === 'CEDULA') ? 'selected' : ''; ?>>CÉDULA</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="small font-weight-bold">Resultado:</label>
-                                    <select name="resultado[]" class="form-control form-control-sm sel-resultado" required>
-                                        <option value="ENCONTRADO" <?php echo (($det['resultado'] ?? '') === 'ENCONTRADO') ? 'selected' : ''; ?>>ENCONTRADO</option>
-                                        <option value="NO_ENCONTRADO" <?php echo (($det['resultado'] ?? '') === 'NO_ENCONTRADO') ? 'selected' : ''; ?>>NO ENCONTRADO</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label class="small font-weight-bold">Observaciones:</label>
-                                    <input type="text" name="observaciones[]" class="form-control form-control-sm" value="<?php echo e($det['observaciones']); ?>">
-                                </div>
-                            </div>
-                            <div class="panel-data">
-                                <div class="form-row mb-3">
-                                    <div class="col-md-6"><label class="small font-weight-bold lbl-filiacion-1"><?php echo $is_family ? 'Cónyuge 1:' : 'Madre:'; ?></label><input type="text" name="padre_conyuge_1[]" class="form-control form-control-sm text-uppercase" value="<?php echo e($det['filiacion_1']); ?>"></div>
-                                    <div class="col-md-6"><label class="small font-weight-bold lbl-filiacion-2"><?php echo $is_family ? 'Cónyuge 2:' : 'Padre:'; ?></label><input type="text" name="padre_conyuge_2[]" class="form-control form-control-sm text-uppercase" value="<?php echo e($det['filiacion_2']); ?>"></div>
-                                </div>
-                                <div class="form-row panel-partida <?php echo $is_found ? '' : 'd-none'; ?>">
-                                    <div class="col-md-3"><label class="small">Partida N°:</label><input type="text" name="partida[]" class="form-control form-control-sm" value="<?php echo e($det['partida_numero']); ?>"></div>
-                                    <div class="col-md-3"><label class="small">Folio:</label><input type="text" name="folio[]" class="form-control form-control-sm" value="<?php echo e($det['partida_folio']); ?>"></div>
-                                    <div class="col-md-3"><label class="small">Libro:</label><input type="text" name="libro[]" class="form-control form-control-sm" value="<?php echo e($det['partida_libro']); ?>"></div>
-                                    <div class="col-md-3"><label class="small">Año:</label><input type="number" name="anio[]" class="form-control form-control-sm" value="<?php echo e($det['partida_anio']); ?>" min="1900" max="<?php echo date('Y'); ?>"></div>
-                                </div>
-                                <div class="form-row panel-fecha mt-2">
-                                    <div class="col-md-4"><label class="small font-weight-bold">Fecha del Evento:</label><input type="date" name="fecha_evento[]" class="form-control form-control-sm" value="<?php echo e($det['fecha_evento']); ?>"></div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-info text-white font-weight-bold">IV. ARCHIVOS ADJUNTOS</div>
-            <div class="card-body">
-                <?php if (!empty($archivos_adjuntos)): ?>
-                    <p class="small text-muted mb-2">Archivos actuales (marque para eliminar):</p>
-                    <?php foreach ($archivos_adjuntos as $archivo): ?>
-                        <div class="adjunto-item">
-                            📎 <?php echo e($archivo); ?>
-                            <label class="btn-remove-adjunto">
-                                <input type="checkbox" name="eliminar_adjunto[]" value="<?php echo e($archivo); ?>" style="vertical-align: middle;"> Eliminar
-                            </label>
-                        </div>
-                    <?php endforeach; ?>
-                    <hr>
-                <?php endif; ?>
-
+            <?php elseif (in_array($c['tipo_constancia'], ['SOLTERIA', 'SOLTERIA_DIV'], true)): ?>
+            <!-- ── SOLTERÍA ────────────────────────────────────────────────── -->
+            <div class="form-section shadow-sm p-3 mb-4 bg-white rounded border">
+                <h5 class="text-primary mb-4 border-bottom pb-2">
+                    <?php echo $c['tipo_constancia'] === 'SOLTERIA_DIV' ? 'Estado Familiar (Soltería por Divorcio)' : 'No Registro de Matrimonio (Soltería Simple)'; ?>
+                </h5>
                 <div class="form-group">
-                    <label class="small font-weight-bold">Agregar nuevos archivos PDF:</label>
-                    <input type="file" name="archivos_adjuntos[]" class="form-control-file" multiple accept="application/pdf">
-                    <small class="form-text text-muted">Solo archivos PDF. Máximo 10MB por archivo.</small>
-                    <div id="adjunto_error" class="text-danger small mt-1"></div>
+                    <label><strong>Nombre del inscrito</strong></label>
+                    <input type="text" class="form-control text-uppercase" name="sol_div_nombre_inscrito" value="<?php echo e($c['nombre_no_registro']); ?>">
+                </div>
+                <div class="form-row">
+                    <div class="col-md-3">
+                        <label><small>N° Partida</small></label>
+                        <input type="text" class="form-control" name="sol_div_numero_partida" value="<?php echo e($c['partida_n'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-3">
+                        <label><small>Folio</small></label>
+                        <input type="text" class="form-control" name="sol_div_folio" value="<?php echo e($c['folio_n'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-3">
+                        <label><small>Libro</small></label>
+                        <input type="text" class="form-control" name="sol_div_libro" value="<?php echo e($c['libro_n'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-3">
+                        <label><small>Año</small></label>
+                        <input type="number" class="form-control" name="sol_div_anio" value="<?php echo e($c['anio_n'] ?? ''); ?>" min="1900" max="<?php echo date('Y'); ?>">
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="text-right pb-5">
-            <a href="ver_oficio_institucional.php?id=<?php echo (int)$oficio['id']; ?>" class="btn btn-secondary mr-2">Cancelar</a>
-            <button type="submit" id="btnSubmit" class="btn btn-primary btn-lg shadow">💾 Guardar Cambios</button>
-        </div>
-    </form>
+            <?php elseif ($c['tipo_constancia'] === 'NO_REGISTRO_CED'): ?>
+            <!-- ── CÉDULA ──────────────────────────────────────────────────── -->
+            <div class="form-section shadow-sm p-3 mb-4 bg-white rounded border">
+                <h5 class="text-primary mb-4 border-bottom pb-2">No Registro de Cédula</h5>
+                <div class="form-group">
+                    <label><strong>No aparece registrada Cédula de Identidad a nombre de:</strong></label>
+                    <input type="text" class="form-control text-uppercase" name="ced_nombre_no_registro" value="<?php echo e($c['nombre_no_registro']); ?>">
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <div class="d-flex justify-content-between mt-3">
+                <a href="dashboard.php" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary btn-lg shadow font-weight-bold" id="btnGuardar">💾 Guardar y Regenerar PDF</button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<datalist id="lista_hospitales"></datalist>
 
 <script src="bootstrap/js/jquery-3.7.1.min.js"></script>
 <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('#id_institucion').select2({ theme: 'bootstrap4' });
+$(document).ready(function () {
+    const csrf   = <?php echo json_encode($csrf_token); ?>;
+    const tipo   = <?php echo json_encode($c['tipo_constancia']); ?>;
 
-    $('#id_institucion').on('change', function() {
-        const email = $(this).find(':selected').data('email') || '';
-        $('#email_institucion_hint').text(email ? 'Email de la institución: ' + email : '');
-    });
-    $('#id_institucion').trigger('change');
+    /* Pre-fill data passed from PHP */
+    const pre = {
+        nac_dep_id:   <?php echo (int)$nac_dep_id; ?>,
+        nac_muni_id:  <?php echo (int)$nac_muni_id; ?>,
+        nac_dist_id:  <?php echo (int)$nac_dist_id; ?>,
+        def_dep_id:   <?php echo (int)($c['def_departamento_id'] ?? 0); ?>,
+        def_muni_id:  <?php echo (int)($c['def_municipio_id'] ?? 0); ?>,
+        def_dist_id:  <?php echo (int)($c['def_distrito_id'] ?? 0); ?>
+    };
 
-    $('input[name="archivos_adjuntos[]"]').on('change', function() {
-        const files = this.files;
-        const $error = $('#adjunto_error');
-        $error.text('');
-        for (let file of files) {
-            if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-                $error.text('❌ Solo se permiten archivos PDF.');
-                this.value = '';
-                return false;
-            }
-            if (file.size > 10 * 1024 * 1024) {
-                $error.text('❌ El archivo "' + file.name + '" excede 10MB.');
-                this.value = '';
-                return false;
-            }
-        }
+    /* ── Load hospitals list ──────────────────────────────── */
+    $.post('get_data_constancia.php', {action:'get_hospitales', csrf_token:csrf}, function(data){
+        $('#lista_hospitales').html(data);
     });
 
-    let bloqueCounter = <?php echo count($entradas_raw) + 1; ?>;
+    /* ── auto-uppercase inputs ────────────────────────────── */
+    $(document).on('input', '.text-uppercase', function(){ this.value = this.value.toUpperCase(); });
 
-    $('#btn_add_oficio_bloque').click(function() {
-        const template = $('#template_oficio_bloque').html();
-        const nuevoBloque = $(template);
-        nuevoBloque.find('[data-oficio-index]').attr('data-oficio-index', bloqueCounter);
-        nuevoBloque.find('.btn-add-peticion').attr('data-oficio-index', bloqueCounter);
-        nuevoBloque.find('.oficio-num-display').text(bloqueCounter);
-        $('#contenedor_oficios_bloques').append(nuevoBloque);
-        bloqueCounter++;
+    /* ── Exterior toggles ────────────────────────────────── */
+    $('#nac_es_exterior').on('change', function(){
+        var ext = this.checked;
+        $('#nac_ubicacion_section').toggle(!ext);
+        $('#nac_departamento_id').prop('required', !ext);
+    });
+    $('#def_es_exterior').on('change', function(){
+        var ext = this.checked;
+        $('#def_ubicacion_section').toggle(!ext);
+        $('#def_departamento_id').prop('required', !ext);
     });
 
-    $(document).on('click', '.btn-remove-oficio-bloque', function() {
-        if(confirm('¿Eliminar este oficio de entrada y todas sus peticiones?')) {
-            $(this).closest('.oficio-bloque').remove();
-        }
-    });
+    /* ── NAC Padre toggle ────────────────────────────────── */
+    $('#nac_check_padre').on('change', function(){ $('#nac_contenedor_padre').toggle(this.checked); });
 
-    $(document).on('click', '.btn-add-peticion', function() {
-        const container = $(this).closest('.oficio-bloque').find('.peticiones-container');
-        const peticionCount = container.find('.peticion-item').length + 1;
-        const template = $('#template_peticion').html();
-        const nuevaPeticion = $(template);
-        nuevaPeticion.find('.peticion-num').text(peticionCount);
-        container.append(nuevaPeticion);
-    });
+    /* ── DEF Madre/Padre toggles ────────────────────────── */
+    $('#def_check_madre').on('change', function(){ $('#def_contenedor_madre').toggle(this.checked); });
+    $('#def_check_padre').on('change', function(){ $('#def_contenedor_padre').toggle(this.checked); });
 
-    $(document).on('click', '.btn-remove-peticion', function() {
-        const container = $(this).closest('.peticiones-container');
-        if(container.find('.peticion-item').length > 1) {
-            $(this).closest('.peticion-item').remove();
-            container.find('.peticion-item').each(function(index) {
-                $(this).find('.peticion-num').text(index + 1);
-            });
+    /* ── NAC soporte → hospital ──────────────────────────── */
+    $('#nac_tipo_soporte').on('change', function(){
+        if(['constancia_hosp','ficha_medica','certificado_nac','cert_ficha','cert_cert'].includes($(this).val())){
+            $('#nac_contenedor_hospital').fadeIn();
         } else {
-            alert('Cada oficio debe tener al menos una petición.');
+            $('#nac_contenedor_hospital').fadeOut().find('input').val('');
         }
     });
 
-    function addPersonaRow() {
-        $('#contenedor_personas').append(document.getElementById('template_persona').content.cloneNode(true));
+    /* ── DEF soporte → hospital ──────────────────────────── */
+    $('#def_tipo_soporte').on('change', function(){
+        if(['certificado_hosp','constancia_cert'].includes($(this).val())){
+            $('#def_contenedor_hospital').fadeIn();
+        } else {
+            $('#def_contenedor_hospital').fadeOut().find('input').val('');
+        }
+    });
+
+    /* ── Generic cascade helpers ─────────────────────────── */
+    function loadMunicipios(depId, $muniSel, $distSel, onDone) {
+        if (!depId) return;
+        $.post('get_data_constancia.php', {action:'get_municipios', depto_id:depId, csrf_token:csrf}, function(r){
+            if (!r.success) return;
+            var h = '<option value="">Seleccione Municipio</option>';
+            r.municipios.forEach(function(m){ h += '<option value="'+m.id+'">'+m.nombre+'</option>'; });
+            $muniSel.html(h).prop('disabled', false);
+            $distSel.html('<option value="">Seleccione Distrito</option>').prop('disabled', true);
+            if (onDone) onDone();
+        }, 'json');
     }
-    if($('#contenedor_personas .persona-row').length === 0) addPersonaRow();
-    $('#btn_add_persona').click(addPersonaRow);
 
-    $(document).on('click', '.btn-remove', function() {
-        if($('.persona-row').length > 1) $(this).closest('.persona-row').remove();
+    function loadDistritos(muniId, $distSel, onDone) {
+        if (!muniId) return;
+        $.post('get_data_constancia.php', {action:'get_distritos', municipio_id:muniId, csrf_token:csrf}, function(r){
+            if (!r.success) return;
+            var h = '<option value="">Seleccione Distrito</option>';
+            r.distritos.forEach(function(d){ h += '<option value="'+d.id+'">'+d.nombre+'</option>'; });
+            $distSel.html(h).prop('disabled', false);
+            if (onDone) onDone();
+        }, 'json');
+    }
+
+    /* ── NAC cascade ─────────────────────────────────────── */
+    if (tipo === 'NO_REGISTRO_NAC' && pre.nac_dep_id) {
+        loadMunicipios(pre.nac_dep_id, $('#nac_municipio_id'), $('#nac_distrito_nacimiento_id'), function(){
+            $('#nac_municipio_id').val(pre.nac_muni_id);
+            $('#nac_municipio_nombre').val($("#nac_municipio_id option:selected").text());
+            loadDistritos(pre.nac_muni_id, $('#nac_distrito_nacimiento_id'), function(){
+                $('#nac_distrito_nacimiento_id').val(pre.nac_dist_id);
+                $('#nac_distrito_nombre').val($("#nac_distrito_nacimiento_id option:selected").text());
+            });
+        });
+    }
+
+    $('#nac_departamento_id').on('change', function(){
+        var depId = $(this).val();
+        $('#nac_departamento_nombre').val($("#nac_departamento_id option:selected").text());
+        loadMunicipios(depId, $('#nac_municipio_id'), $('#nac_distrito_nacimiento_id'), null);
+    });
+    $('#nac_municipio_id').on('change', function(){
+        var muniId = $(this).val();
+        $('#nac_municipio_nombre').val($("#nac_municipio_id option:selected").text());
+        loadDistritos(muniId, $('#nac_distrito_nacimiento_id'), null);
+    });
+    $('#nac_distrito_nacimiento_id').on('change', function(){
+        $('#nac_distrito_nombre').val($("#nac_distrito_nacimiento_id option:selected").text());
     });
 
-    $(document).on('change', '.sel-tipo-tramite', function() {
-        const row = $(this).closest('.persona-row');
-        const isFamily = ($(this).val() === 'MATRIMONIO' || $(this).val() === 'DIVORCIO');
-        row.find('.lbl-filiacion-1').text(isFamily ? 'Nombre del Cónyuge 1:' : 'Nombre de la Madre:');
-        row.find('.lbl-filiacion-2').text(isFamily ? 'Nombre del Cónyuge 2:' : 'Nombre del Padre:');
+    /* ── DEF cascade ─────────────────────────────────────── */
+    if (tipo === 'NO_REGISTRO_DEF' && pre.def_dep_id) {
+        loadMunicipios(pre.def_dep_id, $('#def_municipio_id'), $('#def_distrito_id'), function(){
+            $('#def_municipio_id').val(pre.def_muni_id);
+            $('#def_municipio_nombre').val($("#def_municipio_id option:selected").text());
+            loadDistritos(pre.def_muni_id, $('#def_distrito_id'), function(){
+                $('#def_distrito_id').val(pre.def_dist_id);
+                $('#def_distrito_nombre').val($("#def_distrito_id option:selected").text());
+            });
+        });
+    }
+
+    $('#def_departamento_id').on('change', function(){
+        var depId = $(this).val();
+        $('#def_departamento_nombre').val($("#def_departamento_id option:selected").text());
+        loadMunicipios(depId, $('#def_municipio_id'), $('#def_distrito_id'), null);
+    });
+    $('#def_municipio_id').on('change', function(){
+        var muniId = $(this).val();
+        $('#def_municipio_nombre').val($("#def_municipio_id option:selected").text());
+        loadDistritos(muniId, $('#def_distrito_id'), null);
+    });
+    $('#def_distrito_id').on('change', function(){
+        $('#def_distrito_nombre').val($("#def_distrito_id option:selected").text());
     });
 
-    $(document).on('change', '.sel-resultado', function() {
-        const row = $(this).closest('.persona-row');
-        if($(this).val() === 'ENCONTRADO') {
-            row.find('.panel-partida').removeClass('d-none');
-            row.css('border-left', '5px solid #28a745');
-        } else {
-            row.find('.panel-partida').addClass('d-none');
-            row.css('border-left', '5px solid #ffc107');
-        }
-    });
+    /* ── Form submit ─────────────────────────────────────── */
+    $('#formEditarConstancia').on('submit', function(e){
+        e.preventDefault();
+        var btn = $('#btnGuardar');
+        var disabledFields = $(this).find(':disabled').prop('disabled', false);
+        var formData = $(this).serialize();
+        disabledFields.prop('disabled', true);
 
-    $('.sel-tipo-tramite').trigger('change');
-    $('.sel-resultado').trigger('change');
+        btn.prop('disabled', true).text('Guardando...');
 
-    $('#formEditarOficioInst').on('submit', function(e) {
-        const email = $('input[name="email_envio"]').val();
-        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            e.preventDefault();
-            alert('El correo electrónico no tiene un formato válido.');
-            return false;
-        }
-        if(!confirm('¿Está seguro de guardar los cambios? Esto puede regenerar el PDF final.')) {
-            e.preventDefault();
-            return false;
-        }
-        $('#btnSubmit').prop('disabled', true).html('Guardando...');
+        $.ajax({
+            url: 'actualizar_constancia.php',
+            method: 'POST',
+            dataType: 'json',
+            data: formData,
+            success: function(r){
+                if (r.success) {
+                    btn.text('Generando PDF...');
+                    $.post('generar_constancia_pdf.php', formData + '&numero_oficio_generado=' + encodeURIComponent(r.oficio), function(){
+                        alert('✅ Certificación actualizada correctamente.');
+                        window.location.href = 'dashboard.php';
+                    }).fail(function(){
+                        alert('✅ Datos guardados, pero hubo un problema regenerando el PDF.');
+                        window.location.href = 'dashboard.php';
+                    });
+                } else {
+                    alert('Error: ' + (r.msg || 'Error desconocido'));
+                    btn.prop('disabled', false).text('💾 Guardar y Regenerar PDF');
+                }
+            },
+            error: function(){
+                alert('Error de conexión al servidor.');
+                btn.prop('disabled', false).text('💾 Guardar y Regenerar PDF');
+            }
+        });
     });
 });
 </script>
