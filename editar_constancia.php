@@ -473,12 +473,12 @@ $(document).ready(function () {
     $('#nac_es_exterior').on('change', function(){
         var ext = this.checked;
         $('#nac_ubicacion_section').toggle(!ext);
-        $('#nac_departamento_id').prop('required', !ext);
+        $('#nac_departamento_id, #nac_municipio_id, #nac_distrito_nacimiento_id').prop('required', !ext);
     });
     $('#def_es_exterior').on('change', function(){
         var ext = this.checked;
         $('#def_ubicacion_section').toggle(!ext);
-        $('#def_departamento_id').prop('required', !ext);
+        $('#def_departamento_id, #def_municipio_id, #def_distrito_id').prop('required', !ext);
     });
 
     /* ── NAC Padre toggle ────────────────────────────────── */

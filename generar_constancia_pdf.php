@@ -222,6 +222,7 @@ elseif ($tipo_constancia === 'NO_REGISTRO_CED') {
 elseif ($tipo_constancia === 'NO_REGISTRO_MAT') {
     $titulo_constancia = "CERTIFICACIÓN DE NO REGISTRO DE ASIENTO DE MATRIMONIO";
     $descripcion_tramite = "Certificación de no Registro de Asiento de Matrimonio";
+    $es_exterior = (($_POST['es_exterior'] ?? '0') === '1');
     
     // Contrayente 1 (Principal)
     $persona_certificada = mb_strtoupper(trim($_POST['mat_nombre_no_registro'] ?? ''), 'UTF-8');
@@ -244,8 +245,12 @@ elseif ($tipo_constancia === 'NO_REGISTRO_MAT') {
     }
 
     // Párrafo con la redacción ajustada
+    $texto_ambito_mat = $es_exterior
+        ? "Habiéndose efectuado la respectiva búsqueda en los registros de nuestra base de datos, hasta el día <strong>$fecha_legal</strong>."
+        : "Habiéndose efectuado la respectiva búsqueda en los registros de nuestra base de datos que corresponde únicamente al Distrito de San Salvador, hasta el día <strong>$fecha_legal</strong>.";
+
     $parrafo_principal = "<p class='content indent'>
-        Habiéndose efectuado la respectiva búsqueda en los registros de nuestra base de datos que corresponde únicamente al Distrito de San Salvador, hasta el día <strong>$fecha_legal</strong>. <strong>NO aparece registrada ningún Asiento de MATRIMONIO</strong> a nombre de: $texto_nombres.
+        {$texto_ambito_mat} <strong>NO aparece registrada ningún Asiento de MATRIMONIO</strong> a nombre de: $texto_nombres.
     </p>";
 }
 
